@@ -9,26 +9,20 @@
  * 
  * Dependencies:
  * - Logger (M01.01)
- * - InformationTheory (M04.02)
- * - PhysicalConstants (M01.06)
+ * 
+ * Note: InformationTheory (M04.02) and PhysicalConstants (M01.06) are listed
+ * in PRD but this module defines its own constants for self-containment.
  * 
  * Key formulas:
  * - Maximum operations/second = 2E/(πħ)
  * - Maximum bits = E·t/(πħ·ln2)
  */
 
-import { Logger, LogLevel } from '../../core/logger/Logger';
 import { HashVerifier } from '../../core/logger/HashVerifier';
-
-// Get logger instance
-const logger = Logger.getInstance({ minLevel: LogLevel.DEBUG, enableConsole: false });
 
 // ============================================================================
 // PHYSICAL CONSTANTS
 // ============================================================================
-
-// Numerical tolerance for floating-point comparisons
-const EPSILON = 1e-10;
 
 const CONSTANTS = {
   // Speed of light (m/s) - exact
