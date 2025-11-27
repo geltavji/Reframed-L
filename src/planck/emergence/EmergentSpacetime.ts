@@ -627,7 +627,8 @@ export class TensorNetwork {
   }
 
   /**
-   * Compute total bond dimension
+   * Compute total bond dimension (product for tensor networks)
+   * Note: This represents Hilbert space dimension, which is exponential
    */
   getTotalBondDimension(): number {
     let total = 1;
@@ -638,11 +639,24 @@ export class TensorNetwork {
   }
 
   /**
-   * Find minimal cut separating two regions
-   * Returns the number of bonds in the cut
+   * Compute average bond dimension
    */
-  minimalCut(region1: string[], region2: string[]): number {
-    // Simple implementation: count bonds crossing the boundary
+  getAverageBondDimension(): number {
+    if (this.nodes.size === 0) return 1;
+    let sum = 0;
+    for (const node of this.nodes.values()) {
+      sum += node.bondDimension;
+    }
+    return sum / this.nodes.size;
+  }
+
+  /**
+   * Find minimal cut separating region1 from its complement
+   * Returns the number of bonds crossing from region1 to outside
+   * Note: region2 parameter is for interface compatibility
+   */
+  minimalCut(region1: string[], _region2: string[]): number {
+    // Count bonds crossing the boundary of region1
     let cutCount = 0;
     for (const [n1, n2] of this.bonds) {
       const n1InR1 = region1.includes(n1);
@@ -663,8 +677,8 @@ export class TensorNetwork {
       .filter(id => !region.includes(id));
     const cutBonds = this.minimalCut(region, otherRegion);
     
-    // Assume uniform bond dimension
-    const avgBondDim = this.getTotalBondDimension() / Math.max(this.nodes.size, 1);
+    // Use average bond dimension
+    const avgBondDim = this.getAverageBondDimension();
     return cutBonds * Math.log(avgBondDim);
   }
 
