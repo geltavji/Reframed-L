@@ -9,8 +9,10 @@
  * 
  * Dependencies:
  * - Logger (M01.01)
- * - QuantumState (M02.02)
- * - Tensor (M03.01)
+ * 
+ * Note: QuantumState (M02.02) and Tensor (M03.01) are listed in PRD
+ * but not directly used in this implementation. The module uses
+ * its own internal spin and intertwiner representations.
  * 
  * Key formula: A = 8πγl_P² Σ√(j(j+1))
  * Where:
@@ -29,11 +31,14 @@ const logger = Logger.getInstance({ minLevel: LogLevel.DEBUG, enableConsole: fal
 // PHYSICAL CONSTANTS
 // ============================================================================
 
+// Numerical tolerance for floating-point comparisons
+const EPSILON = 1e-10;
+
 const CONSTANTS = {
   // Planck length (m)
   lP: 1.616255e-35,
-  // Planck area (m²)
-  lP2: 2.612e-70,
+  // Planck area (m²) - computed from Planck length for consistency
+  lP2: Math.pow(1.616255e-35, 2),
   // Barbero-Immirzi parameter (commonly used value from black hole entropy)
   gamma: 0.2375,
   // Alternative Barbero-Immirzi parameter value
@@ -163,11 +168,11 @@ export class SpinValueUtil {
     
     // Check if it's a valid spin (integer or half-integer)
     const remainder = j % 0.5;
-    if (Math.abs(remainder) > 1e-10 && Math.abs(remainder - 0.5) > 1e-10) {
+    if (Math.abs(remainder) > EPSILON && Math.abs(remainder - 0.5) > EPSILON) {
       throw new Error('Spin must be integer or half-integer');
     }
 
-    const isHalfInteger = Math.abs((j * 2) % 2 - 1) < 1e-10;
+    const isHalfInteger = Math.abs((j * 2) % 2 - 1) < EPSILON;
     
     return {
       j,
@@ -187,7 +192,7 @@ export class SpinValueUtil {
     
     // Check m is valid (differs from j by integers)
     const diff = j - m;
-    if (Math.abs(diff - Math.round(diff)) > 1e-10) {
+    if (Math.abs(diff - Math.round(diff)) > EPSILON) {
       throw new Error('m must differ from j by integers');
     }
     
@@ -987,6 +992,12 @@ export class ClebschGordan {
 
   /**
    * General Clebsch-Gordan coefficient (simplified recursion)
+   * 
+   * TODO: This is a simplified approximation using normalization factors.
+   * For accurate calculations with larger spin values, implement the full
+   * Wigner 3j symbol formula using the Racah formula or the recursion relation.
+   * The current implementation is sufficient for small spin values (j <= 2)
+   * commonly used in basic LQG calculations.
    */
   private generalCoefficient(j1: number, m1: number, j2: number, m2: number, J: number, M: number): number {
     // Simplified: return approximate value based on normalization
