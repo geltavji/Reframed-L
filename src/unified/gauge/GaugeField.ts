@@ -955,20 +955,5 @@ export class GaugeFieldFactory {
   }
 }
 
-// ============================================================================
-// Exports
-// ============================================================================
+// Note: All functions are exported at their definitions above
 
-export {
-  generateHash,
-  matrixCreate,
-  matrixIdentity,
-  matrixAdd,
-  matrixSub,
-  matrixMul,
-  matrixScale,
-  matrixDagger,
-  matrixTrace,
-  matrixCommutator,
-  matrixAntiCommutator
-};
