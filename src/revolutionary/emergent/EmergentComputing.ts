@@ -192,7 +192,9 @@ export class SoapBubbleComputer {
   }
 
   /**
-   * Find Fermat point of triangle
+   * Find Fermat point of triangle using Weiszfeld's algorithm
+   * The Fermat point minimizes the sum of distances to the three vertices.
+   * If any angle is >= 120°, the obtuse vertex is the optimal point.
    */
   private findFermatPoint(
     a: [number, number], 
@@ -208,11 +210,47 @@ export class SoapBubbleComputer {
       return null; // No Fermat point improves on MST
     }
     
-    // Approximate Fermat point as centroid (simplified)
-    return [
-      (a[0] + b[0] + c[0]) / 3,
-      (a[1] + b[1] + c[1]) / 3
-    ];
+    // Use Weiszfeld's algorithm to find Fermat point
+    // Start from centroid as initial guess
+    let x = (a[0] + b[0] + c[0]) / 3;
+    let y = (a[1] + b[1] + c[1]) / 3;
+    
+    const points = [a, b, c];
+    const maxIterations = 100;
+    const tolerance = 1e-10;
+    
+    for (let iter = 0; iter < maxIterations; iter++) {
+      let numeratorX = 0;
+      let numeratorY = 0;
+      let denominator = 0;
+      
+      for (const p of points) {
+        const dist = Math.sqrt((x - p[0]) ** 2 + (y - p[1]) ** 2);
+        if (dist < tolerance) {
+          // Already at one of the vertices
+          continue;
+        }
+        const weight = 1 / dist;
+        numeratorX += p[0] * weight;
+        numeratorY += p[1] * weight;
+        denominator += weight;
+      }
+      
+      if (denominator === 0) break;
+      
+      const newX = numeratorX / denominator;
+      const newY = numeratorY / denominator;
+      
+      // Check convergence
+      if (Math.abs(newX - x) < tolerance && Math.abs(newY - y) < tolerance) {
+        break;
+      }
+      
+      x = newX;
+      y = newY;
+    }
+    
+    return [x, y];
   }
 
   /**

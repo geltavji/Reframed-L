@@ -15,6 +15,29 @@ import { Logger, LogLevel } from '../../core/logger/Logger';
 import { BigNumber } from '../../core/math/BigNumber';
 
 /**
+ * Complexity classification thresholds
+ * These constants control the boundaries for complexity class determination
+ */
+export const ComplexityThresholds = {
+  /** Growth ratio threshold for O(1) classification - time doesn't grow significantly with input */
+  O_1_THRESHOLD: 0.15,
+  /** Upper bound for logarithmic growth ratio */
+  LOG_N_THRESHOLD: 0.5,
+  /** Linear growth ratio lower bound */
+  LINEAR_LOWER: 0.85,
+  /** Linear growth ratio upper bound */
+  LINEAR_UPPER: 1.15,
+  /** Linearithmic growth ratio upper bound */
+  N_LOG_N_UPPER: 1.6,
+  /** Quadratic growth ratio upper bound */
+  QUADRATIC_UPPER: 3.5,
+  /** Cubic growth ratio upper bound */
+  CUBIC_UPPER: 10,
+  /** Ratio multiplier for decreasing sequence check */
+  DECREASING_TOLERANCE: 1.2
+};
+
+/**
  * Time complexity classes
  */
 export enum TimeComplexityClass {
@@ -171,38 +194,40 @@ export class TimeComplexity {
     const avgRatio = growthRatios.reduce((a, b) => a + b, 0) / growthRatios.length;
     
     // O(1): Constant time - ratio close to 0 (time doesn't grow with input)
-    if (avgRatio <= 0.15) {
+    if (avgRatio <= ComplexityThresholds.O_1_THRESHOLD) {
       return TimeComplexityClass.O_1;
     }
     
     // O(log n): Logarithmic - ratio decreasing and small
-    const isDecreasing = growthRatios.every((r, i) => i === 0 || r <= growthRatios[i-1] * 1.2);
-    if (isDecreasing && avgRatio < 0.5) {
+    const isDecreasing = growthRatios.every((r, i) => 
+      i === 0 || r <= growthRatios[i-1] * ComplexityThresholds.DECREASING_TOLERANCE
+    );
+    if (isDecreasing && avgRatio < ComplexityThresholds.LOG_N_THRESHOLD) {
       return TimeComplexityClass.O_LOG_N;
     }
     
     // O(n): Linear - ratio close to 1
-    if (avgRatio >= 0.85 && avgRatio <= 1.15) {
+    if (avgRatio >= ComplexityThresholds.LINEAR_LOWER && avgRatio <= ComplexityThresholds.LINEAR_UPPER) {
       return TimeComplexityClass.O_N;
     }
     
     // O(n log n): Linearithmic - ratio slightly above 1
-    if (avgRatio > 1.15 && avgRatio < 1.6) {
+    if (avgRatio > ComplexityThresholds.LINEAR_UPPER && avgRatio < ComplexityThresholds.N_LOG_N_UPPER) {
       return TimeComplexityClass.O_N_LOG_N;
     }
     
     // O(n²): Quadratic - ratio around 2
-    if (avgRatio >= 1.6 && avgRatio < 3.5) {
+    if (avgRatio >= ComplexityThresholds.N_LOG_N_UPPER && avgRatio < ComplexityThresholds.QUADRATIC_UPPER) {
       return TimeComplexityClass.O_N_2;
     }
     
     // O(n³): Cubic - ratio around 3
-    if (avgRatio >= 3.5 && avgRatio < 10) {
+    if (avgRatio >= ComplexityThresholds.QUADRATIC_UPPER && avgRatio < ComplexityThresholds.CUBIC_UPPER) {
       return TimeComplexityClass.O_N_3;
     }
     
     // O(2^n): Exponential - ratio growing rapidly
-    if (avgRatio >= 10) {
+    if (avgRatio >= ComplexityThresholds.CUBIC_UPPER) {
       return TimeComplexityClass.O_2_N;
     }
     
