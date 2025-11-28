@@ -21,6 +21,31 @@ import {
 } from '../mass/MassTester';
 
 /**
+ * Pattern detection thresholds
+ * These constants control the sensitivity of pattern detection algorithms
+ */
+export const PatternThresholds = {
+  /** Minimum data points required for convergence detection */
+  MIN_CONVERGENCE_POINTS: 10,
+  /** Number of recent values to check for convergence */
+  CONVERGENCE_WINDOW: 5,
+  /** Minimum data points required for divergence detection */
+  MIN_DIVERGENCE_POINTS: 5,
+  /** Threshold for divergence magnitude */
+  DIVERGENCE_MAGNITUDE: 1e6,
+  /** Multiplier for detecting divergence trend (values grow faster than this) */
+  DIVERGENCE_GROWTH_FACTOR: 0.9,
+  /** Variance threshold for constant detection (relative to mean) */
+  CONSTANT_VARIANCE_RELATIVE: 0.01,
+  /** Absolute variance threshold for constant detection */
+  CONSTANT_VARIANCE_ABSOLUTE: 0.001,
+  /** Minimum points for monotonic detection */
+  MIN_MONOTONIC_POINTS: 5,
+  /** Number of standard deviations for anomaly detection */
+  ANOMALY_STD_DEV: 3
+};
+
+/**
  * Pattern type
  */
 export enum PatternType {
@@ -192,14 +217,14 @@ export class PatternDetector {
       .filter(r => r.actualOutput !== null)
       .map(r => r.actualOutput as number);
 
-    if (values.length < 10) return null;
+    if (values.length < PatternThresholds.MIN_CONVERGENCE_POINTS) return null;
 
     // Check if values converge to a limit
-    const lastValues = values.slice(-5);
+    const lastValues = values.slice(-PatternThresholds.CONVERGENCE_WINDOW);
     const variance = this.calculateVariance(lastValues);
     const mean = this.calculateMean(lastValues);
 
-    if (variance < 0.01 * Math.abs(mean) + 0.001) {
+    if (variance < PatternThresholds.CONSTANT_VARIANCE_RELATIVE * Math.abs(mean) + PatternThresholds.CONSTANT_VARIANCE_ABSOLUTE) {
       return this.createPattern(
         PatternType.CONVERGENCE,
         results[0].formulaId,
@@ -221,20 +246,20 @@ export class PatternDetector {
       .filter(r => r.actualOutput !== null)
       .map(r => r.actualOutput as number);
 
-    if (values.length < 5) return null;
+    if (values.length < PatternThresholds.MIN_DIVERGENCE_POINTS) return null;
 
     // Check if values are growing unbounded
     const absValues = values.map(Math.abs);
     let diverging = true;
     
     for (let i = 1; i < absValues.length; i++) {
-      if (absValues[i] < absValues[i - 1] * 0.9) {
+      if (absValues[i] < absValues[i - 1] * PatternThresholds.DIVERGENCE_GROWTH_FACTOR) {
         diverging = false;
         break;
       }
     }
 
-    if (diverging && absValues[absValues.length - 1] > 1e6) {
+    if (diverging && absValues[absValues.length - 1] > PatternThresholds.DIVERGENCE_MAGNITUDE) {
       return this.createPattern(
         PatternType.DIVERGENCE,
         results[0].formulaId,
@@ -284,14 +309,14 @@ export class PatternDetector {
       .filter(r => r.actualOutput !== null)
       .map(r => r.actualOutput as number);
 
-    if (values.length < 5) return anomalies;
+    if (values.length < PatternThresholds.MIN_MONOTONIC_POINTS) return anomalies;
 
     const mean = this.calculateMean(values);
     const stdDev = Math.sqrt(this.calculateVariance(values));
 
-    // Find values beyond 3 standard deviations
+    // Find values beyond configured standard deviations
     for (let i = 0; i < values.length; i++) {
-      if (Math.abs(values[i] - mean) > 3 * stdDev) {
+      if (Math.abs(values[i] - mean) > PatternThresholds.ANOMALY_STD_DEV * stdDev) {
         anomalies.push(this.createPattern(
           PatternType.ANOMALY,
           results[i].formulaId,
@@ -316,7 +341,7 @@ export class PatternDetector {
       .filter(r => r.actualOutput !== null)
       .map(r => r.actualOutput as number);
 
-    if (values.length < 5) return null;
+    if (values.length < PatternThresholds.MIN_MONOTONIC_POINTS) return null;
 
     let increasing = true;
     let decreasing = true;
