@@ -338,7 +338,7 @@ describe('QuantumGates Module (M08.02)', () => {
       
       // |1⟩ → e^(iθ)|1⟩
       const expectedPhase = angle;
-      expect(result.getBeta().phase().toNumber()).toBeCloseTo(expectedPhase);
+      expect(result.getBeta().phase()).toBeCloseTo(expectedPhase);
     });
   });
 

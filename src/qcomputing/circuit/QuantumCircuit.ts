@@ -105,7 +105,6 @@ export class QuantumCircuit {
   private classicalBits: number;
   private name: string;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(numQubits: number, name: string = 'circuit') {
     if (numQubits < 1 || numQubits > 20) {
@@ -358,7 +357,7 @@ export class QuantumCircuit {
     });
     const bitString = bits.join('');
     
-    const hash = QuantumCircuit.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `circuit:${this.name}:${bitString}:${Date.now()}`
     );
     
@@ -388,7 +387,7 @@ export class QuantumCircuit {
       probabilities.set(bitString, count / shots);
     });
     
-    const hash = QuantumCircuit.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `shots:${this.name}:${shots}:${Date.now()}`
     );
     
@@ -654,7 +653,7 @@ export class QuantumCircuit {
       `${op.gate.getName()}:${op.targetQubits.join(',')}`
     ).join(';');
     
-    return QuantumCircuit.hashVerifier.hash(
+    return HashVerifier.hash(
       `circuit:${this.name}:${this.numQubits}:${opsStr}`
     );
   }
@@ -727,7 +726,6 @@ export class QuantumCircuit {
  * Quantum circuit optimizer
  */
 export class CircuitOptimizer {
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   /**
    * Optimize a circuit
@@ -845,7 +843,7 @@ export class CircuitOptimizer {
    * Get hash
    */
   public static getHash(): string {
-    return CircuitOptimizer.hashVerifier.hash('circuit-optimizer');
+    return HashVerifier.hash('circuit-optimizer');
   }
 }
 

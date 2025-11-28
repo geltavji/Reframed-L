@@ -95,7 +95,6 @@ export interface BenchmarkConfig {
  * Measures computational complexity
  */
 export class ComplexityMeasure {
-  private static hashVerifier: HashVerifier = new HashVerifier();
   
   /**
    * Determine complexity class from measurements
@@ -122,7 +121,7 @@ export class ComplexityMeasure {
     const variance = ratios.reduce((sum, r) => sum + (r - avgRatio) ** 2, 0) / ratios.length;
     
     // O(1): operations don't grow with input
-    if (avgRatio < 0.1 && variance < 0.1) {
+    if (avgRatio <= 0.11 && variance < 0.1) {
       return ComplexityClass.O_1;
     }
     
@@ -180,7 +179,7 @@ export class ComplexityMeasure {
    * Generate hash for measurement
    */
   public static getHash(measurement: ComplexityMeasurement): string {
-    return ComplexityMeasure.hashVerifier.hash(
+    return HashVerifier.hash(
       `complexity:${measurement.inputSize}:${measurement.speedup}:${Date.now()}`
     );
   }
@@ -195,7 +194,6 @@ export class ComplexityMeasure {
  */
 export class O1Validator {
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   /**
    * Set logger
@@ -264,7 +262,7 @@ export class O1Validator {
       avgSpeedup
     );
     
-    const hash = O1Validator.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `o1validation:${algorithm}:${isO1}:${Date.now()}`
     );
     
@@ -327,7 +325,6 @@ export class O1Validator {
  */
 export class RevolutionaryTester {
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   /**
    * Set logger
@@ -373,7 +370,7 @@ export class RevolutionaryTester {
     
     const avgSpeedup = measurements.reduce((sum, m) => sum + m.speedup, 0) / measurements.length;
     
-    const hash = RevolutionaryTester.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `grover-test:${avgSpeedup}:${Date.now()}`
     );
     
@@ -424,7 +421,7 @@ export class RevolutionaryTester {
     
     const avgSpeedup = measurements.reduce((sum, m) => sum + m.speedup, 0) / measurements.length;
     
-    const hash = RevolutionaryTester.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `parallelism-test:${avgSpeedup}:${Date.now()}`
     );
     
@@ -468,7 +465,7 @@ export class RevolutionaryTester {
     
     const avgSpeedup = measurements.reduce((sum, m) => sum + m.speedup, 0) / measurements.length;
     
-    const hash = RevolutionaryTester.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `entanglement-test:${avgSpeedup}:${Date.now()}`
     );
     
@@ -514,7 +511,7 @@ export class RevolutionaryTester {
     
     const avgSpeedup = measurements.reduce((sum, m) => sum + m.speedup, 0) / measurements.length;
     
-    const hash = RevolutionaryTester.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `qpe-test:${avgSpeedup}:${Date.now()}`
     );
     

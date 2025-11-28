@@ -76,7 +76,6 @@ export class QubitState {
   private alpha: Complex;
   private beta: Complex;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(alpha: Complex, beta: Complex) {
     this.alpha = alpha;
@@ -205,8 +204,8 @@ export class QubitState {
     );
     
     if (norm > 0) {
-      this.alpha = this.alpha.scale(1 / norm);
-      this.beta = this.beta.scale(1 / norm);
+      this.alpha = this.alpha.multiply(1 / norm);
+      this.beta = this.beta.multiply(1 / norm);
     }
   }
 
@@ -246,7 +245,7 @@ export class QubitState {
     const probability = outcome === 0 ? p0 : (1 - p0);
     const collapsedState = outcome === 0 ? QubitState.zero() : QubitState.one();
     
-    const hash = QubitState.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `measure:${outcome}:${probability}:${Date.now()}`
     );
     
@@ -262,8 +261,8 @@ export class QubitState {
     const theta = 2 * Math.acos(Math.min(1, alphaAbs));
     
     // Calculate phi from phase difference
-    const alphaPhase = this.alpha.phase().toNumber();
-    const betaPhase = this.beta.phase().toNumber();
+    const alphaPhase = this.alpha.phase();
+    const betaPhase = this.beta.phase();
     const phi = betaPhase - alphaPhase;
     
     // Bloch sphere Cartesian coordinates
@@ -321,7 +320,7 @@ export class QubitState {
    * Generate hash for this state
    */
   public getHash(): string {
-    return QubitState.hashVerifier.hash(
+    return HashVerifier.hash(
       `qubit:${this.alpha.toString()}:${this.beta.toString()}`
     );
   }
@@ -347,7 +346,6 @@ export class MultiQubitState {
   private amplitudes: Complex[];
   private numQubits: number;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(amplitudes: Complex[]) {
     // Validate that length is power of 2
@@ -530,7 +528,7 @@ export class MultiQubitState {
     );
     
     if (norm > 0) {
-      this.amplitudes = this.amplitudes.map(a => a.scale(1 / norm));
+      this.amplitudes = this.amplitudes.map(a => a.multiply(1 / norm));
     }
   }
 
@@ -564,7 +562,7 @@ export class MultiQubitState {
     
     const bitString = outcome.toString(2).padStart(this.numQubits, '0');
     const probability = probs[outcome];
-    const hash = MultiQubitState.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `measure:${outcome}:${bitString}:${probability}:${Date.now()}`
     );
     
@@ -607,7 +605,7 @@ export class MultiQubitState {
       const bit = (i >> (this.numQubits - 1 - qubitIndex)) & 1;
       
       if (bit === outcome) {
-        newAmplitudes.push(this.amplitudes[i].scale(1 / normFactor));
+        newAmplitudes.push(this.amplitudes[i].multiply(1 / normFactor));
       } else {
         newAmplitudes.push(Complex.zero());
       }
@@ -761,7 +759,7 @@ export class MultiQubitState {
    */
   public getHash(): string {
     const amplitudeStr = this.amplitudes.map(a => a.toString()).join(',');
-    return MultiQubitState.hashVerifier.hash(`multiqubit:${this.numQubits}:${amplitudeStr}`);
+    return HashVerifier.hash(`multiqubit:${this.numQubits}:${amplitudeStr}`);
   }
 
   /**
@@ -790,8 +788,6 @@ export class MultiQubitState {
  * Bloch sphere representation and utilities
  */
 export class BlochSphere {
-  private static hashVerifier: HashVerifier = new HashVerifier();
-
   /**
    * Convert Bloch coordinates to qubit state
    */
@@ -834,7 +830,7 @@ export class BlochSphere {
    * Get hash for Bloch coordinates
    */
   public static getHash(coords: BlochCoordinates): string {
-    return BlochSphere.hashVerifier.hash(
+    return HashVerifier.hash(
       `bloch:${coords.theta}:${coords.phi}:${coords.x}:${coords.y}:${coords.z}`
     );
   }
@@ -852,7 +848,6 @@ export class Qubit {
   private label: string;
   private id: string;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
   private static qubitCounter: number = 0;
 
   constructor(
@@ -994,7 +989,7 @@ export class Qubit {
    * Get hash
    */
   public getHash(): string {
-    return Qubit.hashVerifier.hash(
+    return HashVerifier.hash(
       `qubit:${this.id}:${this.state.getHash()}`
     );
   }
@@ -1018,7 +1013,6 @@ export class QubitRegister {
   private qubits: Qubit[];
   private label: string;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(size: number, label: string = 'qreg') {
     this.label = label;
@@ -1098,7 +1092,7 @@ export class QubitRegister {
    */
   public getHash(): string {
     const qubitHashes = this.qubits.map(q => q.getHash()).join(',');
-    return QubitRegister.hashVerifier.hash(`register:${this.label}:${qubitHashes}`);
+    return HashVerifier.hash(`register:${this.label}:${qubitHashes}`);
   }
 
   /**

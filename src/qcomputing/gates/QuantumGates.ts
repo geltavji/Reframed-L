@@ -57,7 +57,6 @@ export abstract class Gate {
   protected matrix: Complex[][];
   protected numQubits: number;
   protected static logger: Logger | null = null;
-  protected static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(name: string, matrix: Complex[][], numQubits: number = 1) {
     this.name = name;
@@ -321,7 +320,7 @@ export abstract class Gate {
     const matrixStr = this.matrix.map(row => 
       row.map(c => c.toString()).join(',')
     ).join(';');
-    return Gate.hashVerifier.hash(`gate:${this.name}:${matrixStr}`);
+    return HashVerifier.hash(`gate:${this.name}:${matrixStr}`);
   }
 
   /**

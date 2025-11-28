@@ -289,8 +289,9 @@ describe('QuantumCircuit Module (M08.03)', () => {
       const results = circuit.runShots(100);
       
       // Bell state should only produce 00 or 11
-      expect(results.counts.has('01') || results.counts.get('01') === 0).toBe(true);
-      expect(results.counts.has('10') || results.counts.get('10') === 0).toBe(true);
+      // Check that 01 and 10 are either not present or have 0 count
+      expect(!results.counts.has('01') || results.counts.get('01') === 0).toBe(true);
+      expect(!results.counts.has('10') || results.counts.get('10') === 0).toBe(true);
     });
   });
 

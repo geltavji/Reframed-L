@@ -107,7 +107,6 @@ export class Grover {
   private oracle: OracleFunction;
   private targetIndices: number[];
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(numQubits: number, oracle: OracleFunction) {
     this.numQubits = numQubits;
@@ -235,7 +234,7 @@ export class Grover {
     const foundIndex = parseInt(result.bitString, 2);
     const success = this.targetIndices.includes(foundIndex);
     
-    const hash = Grover.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `grover:${this.numQubits}:${foundIndex}:${Date.now()}`
     );
     
@@ -306,7 +305,6 @@ export class Grover {
 export class Shor {
   private N: number;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(N: number) {
     if (N < 4 || !Number.isInteger(N)) {
@@ -457,7 +455,7 @@ export class Shor {
     period: number, 
     iterations: number
   ): ShorResult {
-    const hash = Shor.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `shor:${this.N}:${factors.join(',')}:${Date.now()}`
     );
     
@@ -492,7 +490,6 @@ export class VQE {
   private ansatzDepth: number;
   private costFunction: CostFunction;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(numQubits: number, ansatzDepth: number, costFunction: CostFunction) {
     this.numQubits = numQubits;
@@ -587,7 +584,7 @@ export class VQE {
     
     const finalEnergy = this.evaluateEnergy(params);
     
-    const hash = VQE.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `vqe:${this.numQubits}:${finalEnergy}:${Date.now()}`
     );
     
@@ -617,7 +614,6 @@ export class QAOA {
   private edges: [number, number][];
   private depth: number;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(numQubits: number, edges: [number, number][], depth: number = 1) {
     this.numQubits = numQubits;
@@ -729,7 +725,7 @@ export class QAOA {
       }
     });
     
-    const hash = QAOA.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `qaoa:${this.numQubits}:${bestBitstring}:${Date.now()}`
     );
     
@@ -758,7 +754,6 @@ export class QPE {
   private precision: number;
   private unitary: Gate;
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   constructor(precision: number, unitary: Gate) {
     if (unitary.getNumQubits() !== 1) {
@@ -855,7 +850,7 @@ export class QPE {
       Math.sin(2 * Math.PI * phase)
     );
     
-    const hash = QPE.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `qpe:${this.precision}:${phase}:${Date.now()}`
     );
     

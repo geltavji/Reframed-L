@@ -102,7 +102,6 @@ export interface IntegrationSummary {
  */
 export class QComputingIntegration {
   private static logger: Logger | null = null;
-  private static hashVerifier: HashVerifier = new HashVerifier();
 
   /**
    * Set logger
@@ -149,7 +148,7 @@ export class QComputingIntegration {
       failed++;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`qubit-validation:${passed}:${failed}`);
+    const hash = HashVerifier.hash(`qubit-validation:${passed}:${failed}`);
 
     return {
       module: 'Qubit',
@@ -198,7 +197,7 @@ export class QComputingIntegration {
       failed++;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`gates-validation:${passed}:${failed}`);
+    const hash = HashVerifier.hash(`gates-validation:${passed}:${failed}`);
 
     return {
       module: 'QuantumGates',
@@ -247,7 +246,7 @@ export class QComputingIntegration {
       failed++;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`circuit-validation:${passed}:${failed}`);
+    const hash = HashVerifier.hash(`circuit-validation:${passed}:${failed}`);
 
     return {
       module: 'QuantumCircuit',
@@ -300,7 +299,7 @@ export class QComputingIntegration {
       failed++;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`algorithms-validation:${passed}:${failed}`);
+    const hash = HashVerifier.hash(`algorithms-validation:${passed}:${failed}`);
 
     return {
       module: 'QuantumAlgorithms',
@@ -353,7 +352,7 @@ export class QComputingIntegration {
       failed++;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`revolutionary-validation:${passed}:${failed}`);
+    const hash = HashVerifier.hash(`revolutionary-validation:${passed}:${failed}`);
 
     return {
       module: 'RevolutionaryTester',
@@ -402,7 +401,7 @@ export class QComputingIntegration {
       passed = false;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`qubit-gate-test:${passed}`);
+    const hash = HashVerifier.hash(`qubit-gate-test:${passed}`);
 
     return {
       name: 'Qubit-Gate Integration',
@@ -432,7 +431,7 @@ export class QComputingIntegration {
       passed = false;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`gate-circuit-test:${passed}`);
+    const hash = HashVerifier.hash(`gate-circuit-test:${passed}`);
 
     return {
       name: 'Gate-Circuit Integration',
@@ -465,7 +464,7 @@ export class QComputingIntegration {
       passed = false;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`circuit-algorithm-test:${passed}`);
+    const hash = HashVerifier.hash(`circuit-algorithm-test:${passed}`);
 
     return {
       name: 'Circuit-Algorithm Integration',
@@ -496,7 +495,7 @@ export class QComputingIntegration {
       passed = false;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`algorithm-revolutionary-test:${passed}`);
+    const hash = HashVerifier.hash(`algorithm-revolutionary-test:${passed}`);
 
     return {
       name: 'Algorithm-Revolutionary Integration',
@@ -537,7 +536,7 @@ export class QComputingIntegration {
       passed = false;
     }
 
-    const hash = QComputingIntegration.hashVerifier.hash(`full-integration-test:${passed}`);
+    const hash = HashVerifier.hash(`full-integration-test:${passed}`);
 
     return {
       name: 'Full Integration',
@@ -575,7 +574,7 @@ export class QComputingIntegration {
     const state = circuit.getStatevector();
     const executionTime = performance.now() - startTime;
     
-    const hash = QComputingIntegration.hashVerifier.hash(`benchmark:${numQubits}:${depth}:${executionTime}`);
+    const hash = HashVerifier.hash(`benchmark:${numQubits}:${depth}:${executionTime}`);
 
     return {
       name: `Circuit ${numQubits}q x ${depth}d`,
@@ -634,7 +633,7 @@ export class QComputingIntegration {
       overallStatus = 'failed';
     }
     
-    const hash = QComputingIntegration.hashVerifier.hash(
+    const hash = HashVerifier.hash(
       `summary:${validatedModules}:${passedTests}:${overallStatus}`
     );
 
