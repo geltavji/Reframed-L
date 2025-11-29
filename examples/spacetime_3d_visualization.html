@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Spacetime Visualization - PRD-17</title>
+  <style>
+    :root {
+      --bg-space: #0a0a1a;
+      --bg-panel: rgba(255, 255, 255, 0.05);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --accent-blue: #4facfe;
+      --accent-purple: #a855f7;
+      --accent-green: #22c55e;
+      --accent-orange: #f97316;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-space);
+      color: var(--text-primary);
+      overflow: hidden;
+      height: 100vh;
+    }
+    
+    .app {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      height: 100vh;
+    }
+    
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+      .control-panel { display: none; }
+    }
+    
+    /* Main 3D Viewport */
+    .viewport {
+      position: relative;
+      background: radial-gradient(ellipse at center, #1a1a3e 0%, var(--bg-space) 70%);
+      overflow: hidden;
+    }
+    
+    .viewport-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2rem;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+      z-index: 10;
+    }
+    
+    .viewport-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    
+    .viewport-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    /* 3D Canvas Container */
+    .canvas-3d {
+      width: 100%;
+      height: 100%;
+      perspective: 1500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .spacetime-grid {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      transform-style: preserve-3d;
+      animation: rotate3d 30s linear infinite;
+    }
+    
+    @keyframes rotate3d {
+      from { transform: rotateX(20deg) rotateY(0deg); }
+      to { transform: rotateX(20deg) rotateY(360deg); }
+    }
+    
+    /* Grid planes */
+    .grid-plane {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(rgba(79, 172, 254, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 172, 254, 0.1) 1px, transparent 1px);
+      background-size: 25px 25px;
+      border: 1px solid rgba(79, 172, 254, 0.2);
+    }
+    
+    .grid-xy {
+      transform: translateZ(0);
+    }
+    
+    .grid-xz {
+      transform: rotateX(90deg);
+    }
+    
+    /* Celestial objects */
+    .star {
+      position: absolute;
+      background: radial-gradient(circle, #ffffff, transparent);
+      border-radius: 50%;
+      animation: twinkle 2s ease-in-out infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    .massive-object {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle at 30% 30%, #fff7e0, #f97316, #dc2626);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 
+        0 0 60px 20px rgba(249, 115, 22, 0.4),
+        0 0 100px 40px rgba(220, 38, 38, 0.2);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.1); }
+    }
+    
+    /* Spacetime curvature visualization */
+    .curvature-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border: 2px solid rgba(79, 172, 254, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) rotateX(70deg);
+    }
+    
+    .ring-1 { width: 150px; height: 150px; animation: ripple 3s ease-out infinite; }
+    .ring-2 { width: 220px; height: 220px; animation: ripple 3s ease-out infinite 0.5s; }
+    .ring-3 { width: 300px; height: 300px; animation: ripple 3s ease-out infinite 1s; }
+    .ring-4 { width: 380px; height: 380px; animation: ripple 3s ease-out infinite 1.5s; }
+    
+    @keyframes ripple {
+      0% { opacity: 0.6; transform: translate(-50%, -50%) rotateX(70deg) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) rotateX(70deg) scale(1.5); }
+    }
+    
+    /* Geodesic paths */
+    .geodesic {
+      position: absolute;
+      width: 300px;
+      height: 200px;
+      border: 3px solid transparent;
+      border-top-color: var(--accent-green);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(60deg) rotateZ(0deg);
+      animation: orbit 8s linear infinite;
+    }
+    
+    .geodesic-2 {
+      animation-delay: -2.5s;
+      border-top-color: var(--accent-purple);
+    }
+    
+    .geodesic-3 {
+      animation-delay: -5s;
+      border-top-color: var(--accent-blue);
+    }
+    
+    @keyframes orbit {
+      from { transform: translate(-50%, -50%) rotateX(60deg) rotateZ(0deg); }
+      to { transform: translate(-50%, -50%) rotateX(60deg) rotateZ(360deg); }
+    }
+    
+    /* Info overlay */
+    .info-overlay {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      background: var(--bg-panel);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      max-width: 350px;
+    }
+    
+    .info-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .info-equation {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+    
+    .info-description {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    /* Control Panel */
+    .control-panel {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid var(--border);
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+    
+    .panel-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .control-section {
+      margin-bottom: 2rem;
+    }
+    
+    /* Visualization selector */
+    .viz-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .viz-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .viz-option:hover {
+      background: rgba(79, 172, 254, 0.1);
+      border-color: var(--accent-blue);
+    }
+    
+    .viz-option.active {
+      background: rgba(79, 172, 254, 0.2);
+      border-color: var(--accent-blue);
+    }
+    
+    .viz-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    
+    .viz-icon.spacetime { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); }
+    .viz-icon.quantum { background: linear-gradient(135deg, var(--accent-green), var(--accent-blue)); }
+    .viz-icon.field { background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple)); }
+    
+    .viz-info h4 {
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .viz-info p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Sliders */
+    .slider-control {
+      margin-bottom: 1.25rem;
+    }
+    
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+    }
+    
+    .slider-value {
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+    
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--bg-panel);
+      outline: none;
+      -webkit-appearance: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      cursor: pointer;
+    }
+    
+    /* Color legend */
+    .color-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+    }
+    
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .legend-color.geodesic-1 { background: var(--accent-green); }
+    .legend-color.geodesic-2 { background: var(--accent-purple); }
+    .legend-color.geodesic-3 { background: var(--accent-blue); }
+    .legend-color.mass { background: var(--accent-orange); }
+    
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .stat-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+    }
+    
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+    
+    /* Action buttons */
+    .action-btn {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 0.5rem;
+    }
+    
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: white;
+    }
+    
+    .action-btn.secondary {
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Main 3D Viewport -->
+    <div class="viewport">
+      <div class="viewport-header">
+        <h1 class="viewport-title">🌌 Spacetime Curvature Visualization</h1>
+        <p class="viewport-subtitle">Einstein Field Equations: G<sub>μν</sub> = 8πG T<sub>μν</sub></p>
+      </div>
+      
+      <div class="canvas-3d">
+        <div class="spacetime-grid">
+          <!-- Grid planes -->
+          <div class="grid-plane grid-xy"></div>
+          <div class="grid-plane grid-xz"></div>
+          
+          <!-- Curvature rings -->
+          <div class="curvature-ring ring-1"></div>
+          <div class="curvature-ring ring-2"></div>
+          <div class="curvature-ring ring-3"></div>
+          <div class="curvature-ring ring-4"></div>
+          
+          <!-- Massive object (star/black hole) -->
+          <div class="massive-object"></div>
+          
+          <!-- Geodesic paths -->
+          <div class="geodesic"></div>
+          <div class="geodesic geodesic-2"></div>
+          <div class="geodesic geodesic-3"></div>
+        </div>
+      </div>
+      
+      <!-- Info overlay -->
+      <div class="info-overlay">
+        <div class="info-title">📐 Spacetime Curvature</div>
+        <div class="info-equation">
+          R<sub>μν</sub> - ½g<sub>μν</sub>R = 8πG/c⁴ · T<sub>μν</sub>
+        </div>
+        <p class="info-description">
+          Mass curves spacetime, and curved spacetime tells mass how to move. The colored rings show geodesic paths - the straightest possible paths through curved spacetime. Objects follow these paths due to gravity.
+        </p>
+      </div>
+    </div>
+    
+    <!-- Control Panel -->
+    <div class="control-panel">
+      <div class="control-section">
+        <div class="panel-title">Visualization Type</div>
+        <div class="viz-selector">
+          <div class="viz-option active">
+            <div class="viz-icon spacetime">🌐</div>
+            <div class="viz-info">
+              <h4>Spacetime Curvature</h4>
+              <p>Einstein Field Equations</p>
+            </div>
+          </div>
+          <div class="viz-option">
+            <div class="viz-icon quantum">⚛️</div>
+            <div class="viz-info">
+              <h4>Quantum States</h4>
+              <p>Wavefunction Evolution</p>
+            </div>
+          </div>
+          <div class="viz-option">
+            <div class="viz-icon field">🧲</div>
+            <div class="viz-info">
+              <h4>Field Lines</h4>
+              <p>Electromagnetic Fields</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="control-section">
+        <div class="panel-title">Parameters</div>
+        
+        <div class="slider-control">
+          <div class="slider-label">
+            <span>Mass (M☉)</span>
+            <span class="slider-value">10.0</span>
+          </div>
+          <input type="range" min="1" max="100" value="10">
+        </div>
+        
+        <div class="slider-control">
+          <div class="slider-label">
+            <span>Rotation Speed</span>
+            <span class="slider-value">1.0x</span>
+          </div>
+          <input type="range" min="0" max="20" value="10">
+        </div>
+        
+        <div class="slider-control">
+          <div class="slider-label">
+            <span>Curvature Intensity</span>
+            <span class="slider-value">0.8</span>
+          </div>
+          <input type="range" min="0" max="100" value="80">
+        </div>
+        
+        <div class="slider-control">
+          <div class="slider-label">
+            <span>Grid Density</span>
+            <span class="slider-value">20</span>
+          </div>
+          <input type="range" min="5" max="50" value="20">
+        </div>
+      </div>
+      
+      <div class="control-section">
+        <div class="panel-title">Color Legend</div>
+        <div class="color-legend">
+          <div class="legend-item">
+            <div class="legend-color mass"></div>
+            <span>Massive Object</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color geodesic-1"></div>
+            <span>Geodesic Path 1</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color geodesic-2"></div>
+            <span>Geodesic Path 2</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color geodesic-3"></div>
+            <span>Geodesic Path 3</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="control-section">
+        <div class="panel-title">Simulation Stats</div>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number">2.95</div>
+            <div class="stat-label">Schwarzschild Radius (km)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">1.47</div>
+            <div class="stat-label">Event Horizon (AU)</div>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Time Dilation at r=rs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">c</div>
+            <div class="stat-label">Escape Velocity at rs</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="control-section">
+        <div class="panel-title">Actions</div>
+        <button class="action-btn primary">📸 Export Screenshot</button>
+        <button class="action-btn secondary">🔄 Reset View</button>
+        <button class="action-btn secondary">⏯️ Pause Animation</button>
+        <button class="action-btn secondary">📊 Show Data Panel</button>
+      </div>
+      
+      <div style="margin-top: auto; padding-top: 1rem; font-size: 0.7rem; color: var(--text-secondary); text-align: center;">
+        PRD-17: Visualization UI/UX<br>
+        Phase 17.3: 3D Visualization
+      </div>
+    </div>
+  </div>
+</body>
+</html>
