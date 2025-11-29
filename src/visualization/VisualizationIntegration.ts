@@ -171,7 +171,9 @@ export class VisualizationIntegration {
 
   private testFullPipeline(): boolean {
     try {
-      const viz = this.coreSystem.getAllFormulaVisualizations()[0];
+      const visualizations = this.coreSystem.getAllFormulaVisualizations();
+      if (visualizations.length === 0) return false;
+      const viz = visualizations[0];
       return viz !== undefined;
     } catch {
       return false;

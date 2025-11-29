@@ -172,9 +172,12 @@ export class QuantumIntegration {
 
   private testFullPipeline(): boolean {
     try {
-      const algorithm = this.extensions.getAllAlgorithms()[0];
-      const hardware = this.hardware.getAllHardware()[0];
-      return algorithm !== undefined && hardware !== undefined;
+      const algorithms = this.extensions.getAllAlgorithms();
+      const hardwareList = this.hardware.getAllHardware();
+      if (algorithms.length === 0 || hardwareList.length === 0) return false;
+      const algorithm = algorithms[0];
+      const hw = hardwareList[0];
+      return algorithm !== undefined && hw !== undefined;
     } catch {
       return false;
     }

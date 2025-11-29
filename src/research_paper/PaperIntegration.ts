@@ -180,7 +180,7 @@ export class PaperIntegration {
         derivationSteps: ['Step 1', 'Step 2'],
         consistencyScore: 0.9
       });
-      return paper !== undefined;
+      return paper != null && paper.id !== undefined;
     } catch {
       return false;
     }

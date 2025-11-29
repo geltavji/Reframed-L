@@ -207,8 +207,11 @@ export class TimeIntegration {
 
   private testFullPipeline(): boolean {
     try {
-      const machine = this.machineDesign.getAllDesigns()[0];
-      const trajectory = this.navigator.getAllTrajectories()[0];
+      const designs = this.machineDesign.getAllDesigns();
+      const trajectories = this.navigator.getAllTrajectories();
+      if (designs.length === 0 || trajectories.length === 0) return false;
+      const machine = designs[0];
+      const trajectory = trajectories[0];
       return machine !== undefined && trajectory !== undefined;
     } catch {
       return false;

@@ -196,8 +196,11 @@ export class AntiGravityIntegration {
 
   private testFullPipeline(): boolean {
     try {
-      const spacecraft = this.spacecraft.getAllDesigns()[0];
-      const trajectory = this.missionPlanner.getAllTrajectories()[0];
+      const designs = this.spacecraft.getAllDesigns();
+      const trajectories = this.missionPlanner.getAllTrajectories();
+      if (designs.length === 0 || trajectories.length === 0) return false;
+      const spacecraft = designs[0];
+      const trajectory = trajectories[0];
       return spacecraft !== undefined && trajectory !== undefined;
     } catch {
       return false;
