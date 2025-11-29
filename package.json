@@ -12,14 +12,20 @@
     "lint": "eslint src/**/*.ts",
     "verify-hashes": "ts-node scripts/verify-hashes.ts"
   },
-  "keywords": ["quantum", "physics", "mathematics", "axioms", "proof"],
+  "keywords": [
+    "quantum",
+    "physics",
+    "mathematics",
+    "axioms",
+    "proof"
+  ],
   "author": "Qlaws Ham Project",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^29.5.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^20.0.0",
     "jest": "^29.7.0",
-    "ts-jest": "^29.1.0",
-    "typescript": "^5.0.0"
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3"
   }
 }
