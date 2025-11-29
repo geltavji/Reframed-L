@@ -1056,18 +1056,51 @@ export class TwistorLine {
    */
   contains(Z: Twistor, epsilon: number = 1e-10): boolean {
     // Z lies on the line spanned by Z1, Z2 if Z = αZ1 + βZ2 for some α, β
-    // This is equivalent to det(Z, Z1, Z2) = 0 in appropriate sense
+    // Check if vectors Z, Z1, Z2 are linearly dependent
     
-    // Simplified check: try to find α, β
-    // For each component, check if Z = αZ1 + βZ2 is consistent
     const arr = Z.toArray();
     const arr1 = this.Z1.toArray();
     const arr2 = this.Z2.toArray();
     
-    // Try to solve for α, β from first two non-degenerate equations
-    // This is a simplification; full implementation needs proper linear algebra
+    // Try to solve for α, β using first two independent equations
+    // Z[i] = α*Z1[i] + β*Z2[i] for i = 0,1,2,3
     
-    return true; // Placeholder
+    // Find two non-degenerate equations
+    let idx1 = -1, idx2 = -1;
+    for (let i = 0; i < 4; i++) {
+      if (Math.abs(arr1[i].re) > epsilon || Math.abs(arr1[i].im) > epsilon ||
+          Math.abs(arr2[i].re) > epsilon || Math.abs(arr2[i].im) > epsilon) {
+        if (idx1 === -1) idx1 = i;
+        else if (idx2 === -1) { idx2 = i; break; }
+      }
+    }
+    
+    if (idx1 === -1 || idx2 === -1) return false;
+    
+    // Solve 2x2 system for α, β (simplified real approximation)
+    const a11 = arr1[idx1].re, a12 = arr2[idx1].re;
+    const a21 = arr1[idx2].re, a22 = arr2[idx2].re;
+    const b1 = arr[idx1].re, b2 = arr[idx2].re;
+    
+    const det = a11 * a22 - a12 * a21;
+    if (Math.abs(det) < epsilon) return false;
+    
+    const alpha = (b1 * a22 - b2 * a12) / det;
+    const beta = (a11 * b2 - a21 * b1) / det;
+    
+    // Verify solution works for all components
+    for (let i = 0; i < 4; i++) {
+      const expected = {
+        re: alpha * arr1[i].re + beta * arr2[i].re,
+        im: alpha * arr1[i].im + beta * arr2[i].im
+      };
+      if (Math.abs(expected.re - arr[i].re) > epsilon ||
+          Math.abs(expected.im - arr[i].im) > epsilon) {
+        return false;
+      }
+    }
+    
+    return true;
   }
 
   /**

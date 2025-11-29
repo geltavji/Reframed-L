@@ -119,7 +119,7 @@ export class DocumentationGenerator {
   private apiCount: number = 0;
 
   constructor() {
-    this.logger = new Logger();
+    this.logger = Logger.getInstance();
   }
 
   /**

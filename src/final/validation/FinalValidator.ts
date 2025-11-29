@@ -118,7 +118,7 @@ export class FinalValidator {
   private proofCount: number = 0;
 
   constructor() {
-    this.logger = new Logger();
+    this.logger = Logger.getInstance();
   }
 
   /**

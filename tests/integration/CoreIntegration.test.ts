@@ -43,7 +43,7 @@ describe('CoreIntegration (M01.09) - Phase 1.6', () => {
 
       const c = integration.createComplex(3, 4);
       expect(c).toBeInstanceOf(Complex);
-      expect(c.magnitude()).toBe(5);
+      expect(c.magnitude().toNumber()).toBe(5);
 
       const m = integration.createMatrix([[1, 2], [3, 4]]);
       expect(m).toBeInstanceOf(Matrix);
@@ -200,9 +200,9 @@ describe('CoreIntegration (M01.09) - Phase 1.6', () => {
         const imag = new BigNumber(4);
         const c = new Complex(real, imag);
         
-        expect(c.real).toBe(3);
-        expect(c.imag).toBe(4);
-        expect(c.magnitude()).toBe(5);
+        expect(c.real.toNumber()).toBe(3);
+        expect(c.imag.toNumber()).toBe(4);
+        expect(c.magnitude().toNumber()).toBe(5);
       });
 
       it('should preserve precision in complex operations', () => {
@@ -426,7 +426,7 @@ describe('CoreIntegration (M01.09) - Phase 1.6', () => {
       
       // Eigenvalue 1: cos(θ) + i*sin(θ)
       const eigenvalue = new Complex(cos, sin);
-      expect(eigenvalue.magnitude()).toBeCloseTo(1, 10);
+      expect(eigenvalue.magnitude().toNumber()).toBeCloseTo(1, 10);
       expect(eigenvalue.phase()).toBeCloseTo(theta, 10);
     });
 
@@ -625,14 +625,14 @@ describe('PRD-01 Phase 1.6 Completion Checklist', () => {
   it('✅ Complex + BigNumber + Logger integration verified', () => {
     const c = integration.createComplex(3, 4);
     const logger = integration.getLogger();
-    logger.info('Complex test', { magnitude: c.magnitude() });
+    logger.info('Complex test', { magnitude: c.magnitude().toNumber() });
     
-    expect(c.magnitude()).toBe(5);
+    expect(c.magnitude().toNumber()).toBe(5);
   });
 
   it('✅ Matrix + Complex + BigNumber + Logger integration verified', () => {
     const m = integration.createMatrix([[1, 2], [3, 4]]);
-    expect(m.determinant()).toBe(-2);
+    expect(m.determinant().toNumber()).toBe(-2);
   });
 
   it('✅ PhysicalConstants + BigNumber + Logger integration verified', () => {

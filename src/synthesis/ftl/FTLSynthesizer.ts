@@ -95,7 +95,7 @@ export class FTLSynthesizer {
   private formulaCount: number = 0;
 
   constructor() {
-    this.logger = new Logger();
+    this.logger = Logger.getInstance();
     this.initializeBaseFormulas();
   }
 

@@ -1,0 +1,312 @@
+{
+  "verifiedAt": "2025-11-29T03:33:42.646Z",
+  "totalLaws": 30,
+  "totalChecks": 120,
+  "passedChecks": 120,
+  "failedChecks": 0,
+  "validLaws": 30,
+  "invalidLaws": 0,
+  "successRate": 1,
+  "results": [
+    {
+      "lawName": "Newton's Second Law",
+      "strategy": "information",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Newton's Second Law",
+      "strategy": "computational",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Newton's Second Law",
+      "strategy": "geometric",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Newton's Second Law",
+      "strategy": "holographic",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Newton's Second Law",
+      "strategy": "emergent",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Mass-Energy Equivalence",
+      "strategy": "information",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Mass-Energy Equivalence",
+      "strategy": "computational",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Mass-Energy Equivalence",
+      "strategy": "geometric",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Mass-Energy Equivalence",
+      "strategy": "holographic",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Mass-Energy Equivalence",
+      "strategy": "emergent",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Schrödinger Equation",
+      "strategy": "information",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Schrödinger Equation",
+      "strategy": "computational",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Schrödinger Equation",
+      "strategy": "geometric",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Schrödinger Equation",
+      "strategy": "holographic",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Schrödinger Equation",
+      "strategy": "emergent",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Second Law of Thermodynamics",
+      "strategy": "information",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Second Law of Thermodynamics",
+      "strategy": "computational",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Second Law of Thermodynamics",
+      "strategy": "geometric",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Second Law of Thermodynamics",
+      "strategy": "holographic",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Second Law of Thermodynamics",
+      "strategy": "emergent",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Maxwell's Equations",
+      "strategy": "information",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Maxwell's Equations",
+      "strategy": "computational",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Maxwell's Equations",
+      "strategy": "geometric",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Maxwell's Equations",
+      "strategy": "holographic",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Maxwell's Equations",
+      "strategy": "emergent",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Heisenberg Uncertainty Principle",
+      "strategy": "information",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Heisenberg Uncertainty Principle",
+      "strategy": "computational",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Heisenberg Uncertainty Principle",
+      "strategy": "geometric",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Heisenberg Uncertainty Principle",
+      "strategy": "holographic",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    },
+    {
+      "lawName": "Heisenberg Uncertainty Principle",
+      "strategy": "emergent",
+      "hashValid": true,
+      "consistencyOk": true,
+      "insightsValid": true,
+      "applicationsValid": true,
+      "overallValid": true,
+      "errors": []
+    }
+  ]
+}

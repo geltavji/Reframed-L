@@ -9,9 +9,5 @@ export {
   ModuleIntegrationStatus,
   PlanckSystemStatus,
   CrossModuleTestResult,
-  ValidationExperiment,
-  AreaQuantizationResult,
-  BekensteinValidationResult,
-  ComputationLimitResult,
-  EmergenceValidationResult
+  ValidationExperiment
 } from './PlanckIntegration';

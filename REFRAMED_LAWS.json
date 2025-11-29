@@ -1,0 +1,586 @@
+[
+  {
+    "originalLaw": "Newton's Second Law",
+    "category": "mechanics",
+    "strategy": "information",
+    "originalForm": "F = ma",
+    "reframedExpression": "I(F = ma) = -log₂(P(F))",
+    "reframedStatement": "In information-theoretic terms: Force equals mass times acceleration",
+    "insights": [
+      "Physical process can be viewed as information processing",
+      "Conservation laws map to information conservation"
+    ],
+    "applications": [
+      "Quantum information protocols",
+      "Communication bounds",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "9bfffe2e2f899571bb729a588bb5eba09ab15f07b39dd290b504fff51afcd013"
+  },
+  {
+    "originalLaw": "Newton's Second Law",
+    "category": "mechanics",
+    "strategy": "computational",
+    "originalForm": "F = ma",
+    "reframedExpression": "COMPUTE(F = ma) : O(f(n)) → result",
+    "reframedStatement": "As a computational process: Force equals mass times acceleration",
+    "insights": [
+      "Universe can be modeled as computation",
+      "Physical limits imply computational limits"
+    ],
+    "applications": [
+      "Quantum algorithm design",
+      "Complexity bounds",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "0fd3fb28f11727ab0c36a1ab84d3deb20a5ca07c02c3e538dbfeb3529836d9a1"
+  },
+  {
+    "originalLaw": "Newton's Second Law",
+    "category": "mechanics",
+    "strategy": "geometric",
+    "originalForm": "F = ma",
+    "reframedExpression": "∇_μ(F = ma) = 0 on manifold M",
+    "reframedStatement": "In geometric formulation: Force equals mass times acceleration",
+    "insights": [
+      "Dynamics arise from geometric structure",
+      "Symmetries map to conservation laws (Noether)"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "b2fe8003e4b7a875ad02e0804294b7e72b1a7acdc65e05196c86751951868f31"
+  },
+  {
+    "originalLaw": "Newton's Second Law",
+    "category": "mechanics",
+    "strategy": "holographic",
+    "originalForm": "F = ma",
+    "reframedExpression": "F = ma_boundary ↔ F = ma_bulk",
+    "reframedStatement": "Under holographic correspondence: Force equals mass times acceleration",
+    "insights": [
+      "Bulk physics encoded on boundary",
+      "Dimensional reduction possible"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "6399ebbb79319c9ff103845d6cf1fc7a286ccc749b75ef5136d15a74e198e341"
+  },
+  {
+    "originalLaw": "Newton's Second Law",
+    "category": "mechanics",
+    "strategy": "emergent",
+    "originalForm": "F = ma",
+    "reframedExpression": "lim_{N→∞} ⟨F = ma⟩ = F = ma_classical",
+    "reframedStatement": "As an emergent phenomenon: Force equals mass times acceleration",
+    "insights": [
+      "Classical behavior emerges from quantum substrate",
+      "Large N limit reveals classical structure"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "8701b835bc70bfb3ed1687562b2ceb6fd9a4112a37b7ac9a2f0014459913f70b"
+  },
+  {
+    "originalLaw": "Mass-Energy Equivalence",
+    "category": "relativity",
+    "strategy": "information",
+    "originalForm": "E = mc²",
+    "reframedExpression": "I(E = mc²) = -log₂(P(E))",
+    "reframedStatement": "In information-theoretic terms: Energy equals mass times speed of light squared",
+    "insights": [
+      "Physical process can be viewed as information processing",
+      "Conservation laws map to information conservation"
+    ],
+    "applications": [
+      "Quantum information protocols",
+      "Communication bounds",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "32fdcde1fae322a24a8b1f2077980b3a5762ec9a41af9f8fc8245fe1f1d61081"
+  },
+  {
+    "originalLaw": "Mass-Energy Equivalence",
+    "category": "relativity",
+    "strategy": "computational",
+    "originalForm": "E = mc²",
+    "reframedExpression": "COMPUTE(E = mc²) : O(f(n)) → result",
+    "reframedStatement": "As a computational process: Energy equals mass times speed of light squared",
+    "insights": [
+      "Universe can be modeled as computation",
+      "Physical limits imply computational limits"
+    ],
+    "applications": [
+      "Quantum algorithm design",
+      "Complexity bounds",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "9aeb515c2379fc7bf41313138835b7234fa345e4a3821c43e449592f79881952"
+  },
+  {
+    "originalLaw": "Mass-Energy Equivalence",
+    "category": "relativity",
+    "strategy": "geometric",
+    "originalForm": "E = mc²",
+    "reframedExpression": "∇_μ(E = mc²) = 0 on manifold M",
+    "reframedStatement": "In geometric formulation: Energy equals mass times speed of light squared",
+    "insights": [
+      "Dynamics arise from geometric structure",
+      "Symmetries map to conservation laws (Noether)"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "518e2be827d33423d8e51da841fdd2e80af309aca52d56e877baa9e67aca2e5b"
+  },
+  {
+    "originalLaw": "Mass-Energy Equivalence",
+    "category": "relativity",
+    "strategy": "holographic",
+    "originalForm": "E = mc²",
+    "reframedExpression": "E = mc²_boundary ↔ E = mc²_bulk",
+    "reframedStatement": "Under holographic correspondence: Energy equals mass times speed of light squared",
+    "insights": [
+      "Bulk physics encoded on boundary",
+      "Dimensional reduction possible"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "3f2bc694073afa892bd3d99af8d47c82a34c92550ac6ce823600b264f1d7a13f"
+  },
+  {
+    "originalLaw": "Mass-Energy Equivalence",
+    "category": "relativity",
+    "strategy": "emergent",
+    "originalForm": "E = mc²",
+    "reframedExpression": "lim_{N→∞} ⟨E = mc²⟩ = E = mc²_classical",
+    "reframedStatement": "As an emergent phenomenon: Energy equals mass times speed of light squared",
+    "insights": [
+      "Classical behavior emerges from quantum substrate",
+      "Large N limit reveals classical structure"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "6352aea55b03bb70a83a8283e4b395c88f7152c3de000de62b2afa1815badb23"
+  },
+  {
+    "originalLaw": "Schrödinger Equation",
+    "category": "quantum",
+    "strategy": "information",
+    "originalForm": "iℏ∂ψ/∂t = Ĥψ",
+    "reframedExpression": "I(iℏ∂ψ/∂t = Ĥψ) = -log₂(P(ψ))",
+    "reframedStatement": "In information-theoretic terms: Time evolution of quantum state",
+    "insights": [
+      "Physical process can be viewed as information processing",
+      "Conservation laws map to information conservation"
+    ],
+    "applications": [
+      "Quantum information protocols",
+      "Communication bounds",
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "aa000f8d014ae1d5e5f8367d3104efb4e1716cf0f5920bdd1c510f3bc92f50ef"
+  },
+  {
+    "originalLaw": "Schrödinger Equation",
+    "category": "quantum",
+    "strategy": "computational",
+    "originalForm": "iℏ∂ψ/∂t = Ĥψ",
+    "reframedExpression": "COMPUTE(iℏ∂ψ/∂t = Ĥψ) : O(f(n)) → result",
+    "reframedStatement": "As a computational process: Time evolution of quantum state",
+    "insights": [
+      "Universe can be modeled as computation",
+      "Physical limits imply computational limits"
+    ],
+    "applications": [
+      "Quantum algorithm design",
+      "Complexity bounds",
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "e18aefe6a0e14d01ac60e09f498fb8b0d2ae8b7d7c341d4716a5214a1b323d5e"
+  },
+  {
+    "originalLaw": "Schrödinger Equation",
+    "category": "quantum",
+    "strategy": "geometric",
+    "originalForm": "iℏ∂ψ/∂t = Ĥψ",
+    "reframedExpression": "∇_μ(iℏ∂ψ/∂t = Ĥψ) = 0 on manifold M",
+    "reframedStatement": "In geometric formulation: Time evolution of quantum state",
+    "insights": [
+      "Dynamics arise from geometric structure",
+      "Symmetries map to conservation laws (Noether)"
+    ],
+    "applications": [
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "fa662fcc83e5f0e1b44ddb54fc72d1831ea55b3b4483757d07927cdb3b50e8ab"
+  },
+  {
+    "originalLaw": "Schrödinger Equation",
+    "category": "quantum",
+    "strategy": "holographic",
+    "originalForm": "iℏ∂ψ/∂t = Ĥψ",
+    "reframedExpression": "iℏ∂ψ/∂t = Ĥψ_boundary ↔ iℏ∂ψ/∂t = Ĥψ_bulk",
+    "reframedStatement": "Under holographic correspondence: Time evolution of quantum state",
+    "insights": [
+      "Bulk physics encoded on boundary",
+      "Dimensional reduction possible"
+    ],
+    "applications": [
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "57088954f1f0a7c20a60ea5d28f651a3563474aac0d5e4e25da40581c1d1b0b6"
+  },
+  {
+    "originalLaw": "Schrödinger Equation",
+    "category": "quantum",
+    "strategy": "emergent",
+    "originalForm": "iℏ∂ψ/∂t = Ĥψ",
+    "reframedExpression": "lim_{N→∞} ⟨iℏ∂ψ/∂t = Ĥψ⟩ = iℏ∂ψ/∂t = Ĥψ_classical",
+    "reframedStatement": "As an emergent phenomenon: Time evolution of quantum state",
+    "insights": [
+      "Classical behavior emerges from quantum substrate",
+      "Large N limit reveals classical structure"
+    ],
+    "applications": [
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "543a4df9e881bfe1b0ef727b5926545f9cb317be0265625aa54e94f464cd96c6"
+  },
+  {
+    "originalLaw": "Second Law of Thermodynamics",
+    "category": "thermodynamics",
+    "strategy": "information",
+    "originalForm": "dS ≥ 0",
+    "reframedExpression": "I(dS ≥ 0) = -log₂(P(S))",
+    "reframedStatement": "In information-theoretic terms: Entropy of isolated system never decreases",
+    "insights": [
+      "Physical process can be viewed as information processing",
+      "Conservation laws map to information conservation"
+    ],
+    "applications": [
+      "Quantum information protocols",
+      "Communication bounds",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "c34bf54525ff9381cb644c3622aad054db867a7a9c91ff6d58cb159b6eaac26d"
+  },
+  {
+    "originalLaw": "Second Law of Thermodynamics",
+    "category": "thermodynamics",
+    "strategy": "computational",
+    "originalForm": "dS ≥ 0",
+    "reframedExpression": "COMPUTE(dS ≥ 0) : O(f(n)) → result",
+    "reframedStatement": "As a computational process: Entropy of isolated system never decreases",
+    "insights": [
+      "Universe can be modeled as computation",
+      "Physical limits imply computational limits"
+    ],
+    "applications": [
+      "Quantum algorithm design",
+      "Complexity bounds",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "4e846aa121de00941702df89df18fbe12800dbfbc91326201355e8bad0a6dc36"
+  },
+  {
+    "originalLaw": "Second Law of Thermodynamics",
+    "category": "thermodynamics",
+    "strategy": "geometric",
+    "originalForm": "dS ≥ 0",
+    "reframedExpression": "∇_μ(dS ≥ 0) = 0 on manifold M",
+    "reframedStatement": "In geometric formulation: Entropy of isolated system never decreases",
+    "insights": [
+      "Dynamics arise from geometric structure",
+      "Symmetries map to conservation laws (Noether)"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "86b5811ecaf443812aa30a0d0ac1262fba3980bc389dee5fec48d412f70ad0a2"
+  },
+  {
+    "originalLaw": "Second Law of Thermodynamics",
+    "category": "thermodynamics",
+    "strategy": "holographic",
+    "originalForm": "dS ≥ 0",
+    "reframedExpression": "dS ≥ 0_boundary ↔ dS ≥ 0_bulk",
+    "reframedStatement": "Under holographic correspondence: Entropy of isolated system never decreases",
+    "insights": [
+      "Bulk physics encoded on boundary",
+      "Dimensional reduction possible"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "299f2cf72951bf104c3b295a8a62a281253a1cee2fab401b106272f8c5ff3838"
+  },
+  {
+    "originalLaw": "Second Law of Thermodynamics",
+    "category": "thermodynamics",
+    "strategy": "emergent",
+    "originalForm": "dS ≥ 0",
+    "reframedExpression": "lim_{N→∞} ⟨dS ≥ 0⟩ = dS ≥ 0_classical",
+    "reframedStatement": "As an emergent phenomenon: Entropy of isolated system never decreases",
+    "insights": [
+      "Classical behavior emerges from quantum substrate",
+      "Large N limit reveals classical structure"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "edddf69aa4bdd590cee215115947c459164ea7f4113cf6b156a9de188815e78e"
+  },
+  {
+    "originalLaw": "Maxwell's Equations",
+    "category": "electromagnetism",
+    "strategy": "information",
+    "originalForm": "∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t",
+    "reframedExpression": "I(∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t) = -log₂(P(E))",
+    "reframedStatement": "In information-theoretic terms: Electromagnetic field equations",
+    "insights": [
+      "Physical process can be viewed as information processing",
+      "Conservation laws map to information conservation"
+    ],
+    "applications": [
+      "Quantum information protocols",
+      "Communication bounds",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "bcec6b0542c8420a4353c44ee998e82ddb521a418be8cd2d3c84af1b78bc9491"
+  },
+  {
+    "originalLaw": "Maxwell's Equations",
+    "category": "electromagnetism",
+    "strategy": "computational",
+    "originalForm": "∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t",
+    "reframedExpression": "COMPUTE(∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t) : O(f(n)) → result",
+    "reframedStatement": "As a computational process: Electromagnetic field equations",
+    "insights": [
+      "Universe can be modeled as computation",
+      "Physical limits imply computational limits"
+    ],
+    "applications": [
+      "Quantum algorithm design",
+      "Complexity bounds",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "21d8b74d8e2f47d2f8d51c55affc407ae00108cab406450f548f5ed77829be64"
+  },
+  {
+    "originalLaw": "Maxwell's Equations",
+    "category": "electromagnetism",
+    "strategy": "geometric",
+    "originalForm": "∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t",
+    "reframedExpression": "∇_μ(∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t) = 0 on manifold M",
+    "reframedStatement": "In geometric formulation: Electromagnetic field equations",
+    "insights": [
+      "Dynamics arise from geometric structure",
+      "Symmetries map to conservation laws (Noether)"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "343eb5ca19f96c1d0cb4062d6f7d3fe48325600778ae7960442fd10e667f6c9b"
+  },
+  {
+    "originalLaw": "Maxwell's Equations",
+    "category": "electromagnetism",
+    "strategy": "holographic",
+    "originalForm": "∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t",
+    "reframedExpression": "∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t_boundary ↔ ∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t_bulk",
+    "reframedStatement": "Under holographic correspondence: Electromagnetic field equations",
+    "insights": [
+      "Bulk physics encoded on boundary",
+      "Dimensional reduction possible"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "14f4951161c3cd5638244ac7e2311222c4e28c7a4f4a44e6ab3bb0276ccbd2f2"
+  },
+  {
+    "originalLaw": "Maxwell's Equations",
+    "category": "electromagnetism",
+    "strategy": "emergent",
+    "originalForm": "∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t",
+    "reframedExpression": "lim_{N→∞} ⟨∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t⟩ = ∇·E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t_classical",
+    "reframedStatement": "As an emergent phenomenon: Electromagnetic field equations",
+    "insights": [
+      "Classical behavior emerges from quantum substrate",
+      "Large N limit reveals classical structure"
+    ],
+    "applications": [
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "73231f2b6774142582aa3f9a5f5c7229f07e253d3a4cdc753788e9304702f8c6"
+  },
+  {
+    "originalLaw": "Heisenberg Uncertainty Principle",
+    "category": "quantum",
+    "strategy": "information",
+    "originalForm": "ΔxΔp ≥ ℏ/2",
+    "reframedExpression": "I(ΔxΔp ≥ ℏ/2) = -log₂(P(Δx))",
+    "reframedStatement": "In information-theoretic terms: Position and momentum cannot be simultaneously measured with arbitrary precision",
+    "insights": [
+      "Physical process can be viewed as information processing",
+      "Conservation laws map to information conservation"
+    ],
+    "applications": [
+      "Quantum information protocols",
+      "Communication bounds",
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "a9a4ea88340190c0e39aaf1a5e524818fd91a21317afc26f4166f037f67a5b8c"
+  },
+  {
+    "originalLaw": "Heisenberg Uncertainty Principle",
+    "category": "quantum",
+    "strategy": "computational",
+    "originalForm": "ΔxΔp ≥ ℏ/2",
+    "reframedExpression": "COMPUTE(ΔxΔp ≥ ℏ/2) : O(f(n)) → result",
+    "reframedStatement": "As a computational process: Position and momentum cannot be simultaneously measured with arbitrary precision",
+    "insights": [
+      "Universe can be modeled as computation",
+      "Physical limits imply computational limits"
+    ],
+    "applications": [
+      "Quantum algorithm design",
+      "Complexity bounds",
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "cfa14cf3a31e10304e07922f007e1d86e3e23476a46534889e36eb21d03bb12b"
+  },
+  {
+    "originalLaw": "Heisenberg Uncertainty Principle",
+    "category": "quantum",
+    "strategy": "geometric",
+    "originalForm": "ΔxΔp ≥ ℏ/2",
+    "reframedExpression": "∇_μ(ΔxΔp ≥ ℏ/2) = 0 on manifold M",
+    "reframedStatement": "In geometric formulation: Position and momentum cannot be simultaneously measured with arbitrary precision",
+    "insights": [
+      "Dynamics arise from geometric structure",
+      "Symmetries map to conservation laws (Noether)"
+    ],
+    "applications": [
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "5c309df27631850ae462c24ca1c0b3af7b34ba24b9848619ff88294394ac3882"
+  },
+  {
+    "originalLaw": "Heisenberg Uncertainty Principle",
+    "category": "quantum",
+    "strategy": "holographic",
+    "originalForm": "ΔxΔp ≥ ℏ/2",
+    "reframedExpression": "ΔxΔp ≥ ℏ/2_boundary ↔ ΔxΔp ≥ ℏ/2_bulk",
+    "reframedStatement": "Under holographic correspondence: Position and momentum cannot be simultaneously measured with arbitrary precision",
+    "insights": [
+      "Bulk physics encoded on boundary",
+      "Dimensional reduction possible"
+    ],
+    "applications": [
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "0f0e37b67db85428a4868114d3ad09234e75282b7a11437af76fc13c00c01311"
+  },
+  {
+    "originalLaw": "Heisenberg Uncertainty Principle",
+    "category": "quantum",
+    "strategy": "emergent",
+    "originalForm": "ΔxΔp ≥ ℏ/2",
+    "reframedExpression": "lim_{N→∞} ⟨ΔxΔp ≥ ℏ/2⟩ = ΔxΔp ≥ ℏ/2_classical",
+    "reframedStatement": "As an emergent phenomenon: Position and momentum cannot be simultaneously measured with arbitrary precision",
+    "insights": [
+      "Classical behavior emerges from quantum substrate",
+      "Large N limit reveals classical structure"
+    ],
+    "applications": [
+      "Quantum computing",
+      "Quantum cryptography",
+      "Theoretical physics research",
+      "Educational purposes"
+    ],
+    "consistencyScore": 0.85,
+    "hash": "85c15fdbd61483929c395592083e296ee918972c102f8d8a09740080168d8099"
+  }
+]

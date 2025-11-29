@@ -96,7 +96,7 @@ export class SynthesisEngine {
   private synthesisCount: number = 0;
 
   constructor(config: Partial<SynthesisConfig> = {}) {
-    this.logger = new Logger();
+    this.logger = Logger.getInstance();
     this.config = { ...DEFAULT_CONFIG, ...config };
   }
 

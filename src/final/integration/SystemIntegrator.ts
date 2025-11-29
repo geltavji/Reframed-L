@@ -154,7 +154,7 @@ export class SystemIntegrator {
   private testCount: number = 0;
 
   constructor() {
-    this.logger = new Logger();
+    this.logger = Logger.getInstance();
     this.systemStartTime = new Date();
     this.initializeModules();
   }

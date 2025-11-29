@@ -991,19 +991,60 @@ export class ClebschGordan {
   }
 
   /**
-   * General Clebsch-Gordan coefficient (simplified recursion)
+   * General Clebsch-Gordan coefficient using analytical formula
    * 
-   * TODO: This is a simplified approximation using normalization factors.
-   * For accurate calculations with larger spin values, implement the full
-   * Wigner 3j symbol formula using the Racah formula or the recursion relation.
-   * The current implementation is sufficient for small spin values (j <= 2)
-   * commonly used in basic LQG calculations.
+   * Implements the standard Clebsch-Gordan coefficient calculation
+   * using the analytical formula involving factorials and binomial sums.
+   * Valid for all half-integer and integer spins.
    */
   private generalCoefficient(j1: number, m1: number, j2: number, m2: number, J: number, M: number): number {
-    // Simplified: return approximate value based on normalization
-    // Full implementation would use Wigner 3j symbols or recursion
-    const norm = Math.sqrt((2 * J + 1) / ((2 * j1 + 1) * (2 * j2 + 1)));
-    return norm;
+    // Implement using the analytical formula:
+    // C(j1,m1,j2,m2,J,M) = δ(m1+m2,M) * sqrt((2J+1) * factorial factors) * sum(...)
+    
+    // Helper for factorial
+    const factorial = (n: number): number => {
+      if (n <= 0) return 1;
+      let result = 1;
+      for (let i = 2; i <= n; i++) result *= i;
+      return result;
+    };
+    
+    // Calculate the normalization factor
+    const N = Math.sqrt(
+      (2 * J + 1) *
+      factorial(J + j1 - j2) *
+      factorial(J - j1 + j2) *
+      factorial(j1 + j2 - J) /
+      factorial(j1 + j2 + J + 1)
+    );
+    
+    const N2 = Math.sqrt(
+      factorial(J + M) *
+      factorial(J - M) *
+      factorial(j1 - m1) *
+      factorial(j1 + m1) *
+      factorial(j2 - m2) *
+      factorial(j2 + m2)
+    );
+    
+    // Calculate the sum over k
+    let sum = 0;
+    const kMin = Math.max(0, j2 - J - m1, j1 - J + m2);
+    const kMax = Math.min(j1 + j2 - J, j1 - m1, j2 + m2);
+    
+    for (let k = kMin; k <= kMax; k++) {
+      const term = Math.pow(-1, k) / (
+        factorial(k) *
+        factorial(j1 + j2 - J - k) *
+        factorial(j1 - m1 - k) *
+        factorial(j2 + m2 - k) *
+        factorial(J - j2 + m1 + k) *
+        factorial(J - j1 - m2 + k)
+      );
+      sum += term;
+    }
+    
+    return N * N2 * sum;
   }
 
   /**

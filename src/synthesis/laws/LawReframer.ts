@@ -91,7 +91,7 @@ export class LawReframer {
   private lawCount: number = 0;
 
   constructor() {
-    this.logger = new Logger();
+    this.logger = Logger.getInstance();
     this.initializeOriginalLaws();
     this.initializeStrategies();
   }
