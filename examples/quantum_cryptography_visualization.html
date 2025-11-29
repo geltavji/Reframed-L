@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Cryptography Visualization - Reframed Laws</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #00ff88;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #00ff88;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+        
+        .header p {
+            color: #a0a0ff;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card h2 {
+            color: #00ff88;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .protocol-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00ff88;
+        }
+        
+        .protocol-card h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .protocol-card .security-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        
+        .security-unconditional {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .security-high {
+            background: linear-gradient(135deg, #4a90d9, #357abd);
+            color: #fff;
+        }
+        
+        .security-quantum-safe {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: #fff;
+        }
+        
+        .formula-box {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .qkd-simulator {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 0, 0, 0.3));
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .qubit-stream {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .qubit {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .qubit-0 {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .qubit-1 {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            color: #fff;
+        }
+        
+        .qubit-plus {
+            background: linear-gradient(135deg, #4a90d9, #357abd);
+            color: #fff;
+        }
+        
+        .qubit-minus {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: #fff;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 255, 136, 0.8); }
+        }
+        
+        .basis-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .basis-table th, .basis-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+        
+        .basis-table th {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+        
+        .basis-match {
+            background: rgba(0, 255, 136, 0.2);
+        }
+        
+        .basis-mismatch {
+            background: rgba(255, 107, 107, 0.2);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            color: #00ff88;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #a0a0ff;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .eavesdropper-detection {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(0, 0, 0, 0.3));
+            border: 2px solid #ff6b6b;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .eavesdropper-detection h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .error-rate-bar {
+            height: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .error-rate-fill {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.5s ease;
+        }
+        
+        .error-safe {
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            width: 3%;
+        }
+        
+        .error-warning {
+            background: linear-gradient(90deg, #ffd93d, #ffb347);
+            width: 15%;
+        }
+        
+        .error-danger {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
+            width: 30%;
+        }
+        
+        .threshold-marker {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: #fff;
+        }
+        
+        .entanglement-viz {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .particle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .particle-alice {
+            background: linear-gradient(135deg, #4a90d9, #357abd);
+            box-shadow: 0 0 30px rgba(74, 144, 217, 0.6);
+            animation: spin-alice 3s linear infinite;
+        }
+        
+        .particle-bob {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 0 30px rgba(231, 76, 60, 0.6);
+            animation: spin-bob 3s linear infinite reverse;
+        }
+        
+        @keyframes spin-alice {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes spin-bob {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        
+        .entanglement-link {
+            flex: 1;
+            height: 4px;
+            background: linear-gradient(90deg, #4a90d9, transparent, transparent, #e74c3c);
+            position: relative;
+            animation: link-pulse 2s infinite;
+        }
+        
+        @keyframes link-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .post-quantum {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(0, 0, 0, 0.3));
+            border: 1px solid #9b59b6;
+        }
+        
+        .lattice-viz {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .lattice-point {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(155, 89, 182, 0.6);
+            animation: lattice-animate 4s infinite ease-in-out;
+        }
+        
+        .lattice-point:nth-child(odd) {
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes lattice-animate {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+        }
+        
+        .verification-hash {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #666;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔐 Quantum Cryptography Visualization</h1>
+        <p>PRD-15 Phase 4: Quantum Key Distribution & Post-Quantum Cryptography</p>
+    </div>
+    
+    <div class="container">
+        <div class="grid">
+            <!-- BB84 Protocol -->
+            <div class="card">
+                <h2>📡 BB84 Protocol</h2>
+                <div class="protocol-card">
+                    <span class="security-level security-unconditional">Unconditionally Secure</span>
+                    <h3>Quantum Key Distribution</h3>
+                    <p>The first and most widely implemented QKD protocol, using four quantum states.</p>
+                    <div class="formula-box">
+                        |0⟩, |1⟩ (Z-basis) & |+⟩, |-⟩ (X-basis)
+                    </div>
+                </div>
+                
+                <div class="qkd-simulator">
+                    <h4 style="margin-bottom: 15px;">Key Exchange Simulation</h4>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #4a90d9;">👩‍💻 Alice</span>
+                        <span style="color: #a0a0ff;">Quantum Channel</span>
+                        <span style="color: #e74c3c;">👨‍💻 Bob</span>
+                    </div>
+                    
+                    <div class="qubit-stream">
+                        <div class="qubit qubit-0">|0⟩</div>
+                        <div class="qubit qubit-plus">|+⟩</div>
+                        <div class="qubit qubit-1">|1⟩</div>
+                        <div class="qubit qubit-minus">|-⟩</div>
+                        <div class="qubit qubit-0">|0⟩</div>
+                        <div class="qubit qubit-1">|1⟩</div>
+                    </div>
+                    
+                    <table class="basis-table">
+                        <thead>
+                            <tr>
+                                <th>Qubit</th>
+                                <th>Alice's Basis</th>
+                                <th>Bob's Basis</th>
+                                <th>Match?</th>
+                                <th>Key Bit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="basis-match">
+                                <td>1</td>
+                                <td>Z</td>
+                                <td>Z</td>
+                                <td>✓</td>
+                                <td>0</td>
+                            </tr>
+                            <tr class="basis-mismatch">
+                                <td>2</td>
+                                <td>X</td>
+                                <td>Z</td>
+                                <td>✗</td>
+                                <td>-</td>
+                            </tr>
+                            <tr class="basis-match">
+                                <td>3</td>
+                                <td>Z</td>
+                                <td>Z</td>
+                                <td>✓</td>
+                                <td>1</td>
+                            </tr>
+                            <tr class="basis-match">
+                                <td>4</td>
+                                <td>X</td>
+                                <td>X</td>
+                                <td>✓</td>
+                                <td>1</td>
+                            </tr>
+                            <tr class="basis-mismatch">
+                                <td>5</td>
+                                <td>Z</td>
+                                <td>X</td>
+                                <td>✗</td>
+                                <td>-</td>
+                            </tr>
+                            <tr class="basis-match">
+                                <td>6</td>
+                                <td>Z</td>
+                                <td>Z</td>
+                                <td>✓</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div style="text-align: center; margin-top: 15px;">
+                        <strong style="color: #00ff88;">Final Key: 0111</strong>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">67%</div>
+                        <div class="stat-label">Basis Match Rate</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">2.1%</div>
+                        <div class="stat-label">Error Rate (QBER)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- E91 Protocol -->
+            <div class="card">
+                <h2>🔗 E91 Protocol (Entanglement-Based)</h2>
+                <div class="protocol-card">
+                    <span class="security-level security-unconditional">Unconditionally Secure</span>
+                    <h3>Bell State QKD</h3>
+                    <p>Uses quantum entanglement and Bell's inequality for security verification.</p>
+                    <div class="formula-box">
+                        |Φ⁺⟩ = (|00⟩ + |11⟩) / √2
+                    </div>
+                </div>
+                
+                <div class="entanglement-viz">
+                    <div class="particle particle-alice">A</div>
+                    <div class="entanglement-link"></div>
+                    <div class="particle particle-bob">B</div>
+                </div>
+                
+                <div style="text-align: center; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                    <p style="color: #a0a0ff; margin-bottom: 10px;">Bell's Inequality Test</p>
+                    <div class="formula-box">
+                        |S| = |E(a,b) - E(a,b') + E(a',b) + E(a',b')| ≤ 2
+                    </div>
+                    <p style="margin-top: 10px;">
+                        <span style="color: #00ff88;">Measured: S = 2.7 > 2</span> → Quantum correlations verified!
+                    </p>
+                </div>
+                
+                <div class="eavesdropper-detection">
+                    <h3>🕵️ Eavesdropper Detection</h3>
+                    <p style="margin-bottom: 15px;">Any eavesdropping disturbs quantum states, detectable via error rate:</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Current QBER</span>
+                            <span style="color: #00ff88;">2.3%</span>
+                        </div>
+                        <div class="error-rate-bar">
+                            <div class="error-rate-fill error-safe"></div>
+                            <div class="threshold-marker" style="left: 11%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #a0a0ff;">
+                            <span>Safe (< 11%)</span>
+                            <span>Compromised (> 11%)</span>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 10px; background: rgba(0, 255, 136, 0.2); border-radius: 8px; text-align: center;">
+                        ✓ Channel is SECURE - No eavesdropper detected
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Post-Quantum Cryptography -->
+        <div class="card post-quantum">
+            <h2>🛡️ Post-Quantum Cryptography</h2>
+            <p style="color: #a0a0ff; margin-bottom: 20px;">
+                Classical cryptographic algorithms resistant to quantum computer attacks
+            </p>
+            
+            <div class="grid" style="margin-bottom: 0;">
+                <div class="protocol-card">
+                    <span class="security-level security-quantum-safe">Quantum-Safe</span>
+                    <h3>Lattice-Based: CRYSTALS-Kyber</h3>
+                    <p>NIST-standardized key encapsulation mechanism based on Module-LWE problem.</p>
+                    <div class="formula-box">
+                        (A, As + e) where finding s is hard
+                    </div>
+                    <div class="lattice-viz">
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                        <div class="lattice-point"></div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card">
+                    <span class="security-level security-quantum-safe">Quantum-Safe</span>
+                    <h3>Hash-Based: SPHINCS+</h3>
+                    <p>Stateless hash-based signature scheme with minimal security assumptions.</p>
+                    <div class="formula-box">
+                        σ = Sign(SK, m) using Merkle trees
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <p style="color: #a0a0ff; font-size: 0.9rem;">Security based only on hash function properties</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 15px;">
+                <h4 style="color: #9b59b6; margin-bottom: 15px;">Quantum vs Classical Security Comparison</h4>
+                <table class="basis-table">
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Classical Security</th>
+                            <th>Quantum Security</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>RSA-2048</td>
+                            <td>112 bits</td>
+                            <td style="color: #ff6b6b;">0 bits (broken)</td>
+                            <td>❌ Vulnerable</td>
+                        </tr>
+                        <tr>
+                            <td>AES-256</td>
+                            <td>256 bits</td>
+                            <td>128 bits</td>
+                            <td>✓ Reduced</td>
+                        </tr>
+                        <tr>
+                            <td>CRYSTALS-Kyber</td>
+                            <td>192 bits</td>
+                            <td style="color: #00ff88;">192 bits</td>
+                            <td>✓ Secure</td>
+                        </tr>
+                        <tr>
+                            <td>SPHINCS+</td>
+                            <td>256 bits</td>
+                            <td style="color: #00ff88;">256 bits</td>
+                            <td>✓ Secure</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- CV-QKD -->
+        <div class="card">
+            <h2>📊 Continuous-Variable QKD (CV-QKD)</h2>
+            <div class="protocol-card">
+                <span class="security-level security-high">High Security</span>
+                <h3>Gaussian-Modulated Coherent States</h3>
+                <p>Uses continuous variables (amplitude & phase) instead of discrete qubits.</p>
+                <div class="formula-box">
+                    |α⟩ = e^(-|α|²/2) Σₙ (αⁿ/√n!) |n⟩
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+                <div style="padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px;">
+                    <h4 style="color: #00ff88; margin-bottom: 10px;">Advantages</h4>
+                    <ul style="list-style: none; color: #a0a0ff;">
+                        <li>✓ Standard telecom components</li>
+                        <li>✓ Higher key rates at short distances</li>
+                        <li>✓ Room temperature operation</li>
+                        <li>✓ Easy integration with existing fiber</li>
+                    </ul>
+                </div>
+                <div style="padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px;">
+                    <h4 style="color: #ffd93d; margin-bottom: 10px;">Considerations</h4>
+                    <ul style="list-style: none; color: #a0a0ff;">
+                        <li>⚠ Distance limited (~100km)</li>
+                        <li>⚠ Complex error correction</li>
+                        <li>⚠ Sensitive to excess noise</li>
+                        <li>⚠ Lower rates at long distance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="verification-hash">
+            Verification Hash: 7a8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p... | Generated by PRD-15.4 QuantumCrypto Module
+        </div>
+    </div>
+</body>
+</html>

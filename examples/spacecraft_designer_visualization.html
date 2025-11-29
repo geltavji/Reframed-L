@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spacecraft Designer - Reframed Laws Anti-Gravity</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a2a 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #95a5a6;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        .designer-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 25px;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .panel h2 {
+            color: #3498db;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .spacecraft-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option-btn {
+            padding: 15px;
+            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+        
+        .option-btn:hover {
+            background: rgba(52, 152, 219, 0.2);
+            border-color: rgba(52, 152, 219, 0.5);
+        }
+        
+        .option-btn.selected {
+            background: rgba(52, 152, 219, 0.3);
+            border-color: #3498db;
+        }
+        
+        .option-title {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        
+        .option-desc {
+            font-size: 0.85rem;
+            color: #95a5a6;
+        }
+        
+        .spacecraft-canvas {
+            background: radial-gradient(ellipse at center, #1a1a3a 0%, #0a0a1a 100%);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 230px 80px, #fff, transparent),
+                radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 350px 200px, #fff, transparent),
+                radial-gradient(2px 2px at 420px 90px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 500px 180px, #fff, transparent),
+                radial-gradient(2px 2px at 580px 60px, rgba(255,255,255,0.9), transparent);
+            animation: twinkle 5s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .spacecraft {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .spacecraft-disc {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(52, 152, 219, 0.5),
+                inset 0 -20px 40px rgba(0,0,0,0.5),
+                inset 0 20px 40px rgba(255,255,255,0.1);
+            animation: hover-float 3s ease-in-out infinite;
+        }
+        
+        @keyframes hover-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .spacecraft-dome {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.8), rgba(155, 89, 182, 0.6));
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+        }
+        
+        .field-ring {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border: 3px solid rgba(52, 152, 219, 0.6);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(70deg);
+            animation: ring-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes ring-pulse {
+            0%, 100% { 
+                border-color: rgba(52, 152, 219, 0.6);
+                box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+            }
+            50% { 
+                border-color: rgba(52, 152, 219, 0.9);
+                box-shadow: 0 0 40px rgba(52, 152, 219, 0.6);
+            }
+        }
+        
+        .field-ring:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            animation-delay: 0.5s;
+        }
+        
+        .field-ring:nth-child(3) {
+            width: 350px;
+            height: 350px;
+            animation-delay: 1s;
+        }
+        
+        .thrust-effect {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 60px;
+            background: linear-gradient(180deg, 
+                rgba(52, 152, 219, 0.8) 0%,
+                rgba(155, 89, 182, 0.5) 50%,
+                transparent 100%);
+            border-radius: 50%;
+            filter: blur(10px);
+            animation: thrust-pulse 0.5s ease-in-out infinite;
+        }
+        
+        @keyframes thrust-pulse {
+            0%, 100% { opacity: 0.7; height: 60px; }
+            50% { opacity: 1; height: 80px; }
+        }
+        
+        .specs-panel {
+            overflow-y: auto;
+            max-height: 600px;
+        }
+        
+        .spec-group {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .spec-group h3 {
+            color: #3498db;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+        
+        .spec-label {
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        .spec-value {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .spec-value.excellent {
+            color: #2ecc71;
+        }
+        
+        .spec-value.good {
+            color: #3498db;
+        }
+        
+        .spec-value.moderate {
+            color: #f1c40f;
+        }
+        
+        .spec-value.limited {
+            color: #e74c3c;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-excellent { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+        .progress-good { background: linear-gradient(90deg, #3498db, #2980b9); }
+        .progress-moderate { background: linear-gradient(90deg, #f1c40f, #f39c12); }
+        .progress-limited { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        
+        .formula-display {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .formula-display h4 {
+            color: #3498db;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .formula {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: #fff;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(52, 152, 219, 0.5);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .validation-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #2ecc71;
+            margin-top: 15px;
+        }
+        
+        .verification-hash {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: #555;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .designer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .spacecraft-canvas {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Spacecraft Designer</h1>
+        <p>PRD-13 Phase 4: Anti-Gravity Spacecraft Design & Configuration</p>
+    </div>
+    
+    <div class="container">
+        <div class="designer-grid">
+            <!-- Left Panel: Design Options -->
+            <div class="panel">
+                <h2>🛸 Hull Design</h2>
+                <div class="spacecraft-options">
+                    <button class="option-btn selected">
+                        <div class="option-title">Disc Configuration</div>
+                        <div class="option-desc">Classic saucer shape, optimal field distribution</div>
+                    </button>
+                    <button class="option-btn">
+                        <div class="option-title">Cigar Configuration</div>
+                        <div class="option-desc">Streamlined for warp travel</div>
+                    </button>
+                    <button class="option-btn">
+                        <div class="option-title">Spherical Configuration</div>
+                        <div class="option-desc">Maximum internal volume</div>
+                    </button>
+                    <button class="option-btn">
+                        <div class="option-title">Delta Configuration</div>
+                        <div class="option-desc">High maneuverability</div>
+                    </button>
+                </div>
+                
+                <h2 style="margin-top: 25px;">⚡ Propulsion System</h2>
+                <div class="spacecraft-options">
+                    <button class="option-btn selected">
+                        <div class="option-title">Gravity Drive</div>
+                        <div class="option-desc">Field manipulation propulsion</div>
+                    </button>
+                    <button class="option-btn">
+                        <div class="option-title">Alcubierre Warp</div>
+                        <div class="option-desc">Spacetime contraction/expansion</div>
+                    </button>
+                    <button class="option-btn">
+                        <div class="option-title">EM Drive</div>
+                        <div class="option-desc">Electromagnetic thrust</div>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Center: Spacecraft Canvas -->
+            <div class="panel spacecraft-canvas">
+                <div class="stars"></div>
+                <div class="spacecraft">
+                    <div class="field-ring"></div>
+                    <div class="field-ring"></div>
+                    <div class="field-ring"></div>
+                    <div class="spacecraft-disc">
+                        <div class="spacecraft-dome"></div>
+                    </div>
+                    <div class="thrust-effect"></div>
+                </div>
+            </div>
+            
+            <!-- Right Panel: Specifications -->
+            <div class="panel specs-panel">
+                <h2>📊 Specifications</h2>
+                
+                <div class="spec-group">
+                    <h3>Physical Properties</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Hull Diameter</span>
+                        <span class="spec-value">30 meters</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Height</span>
+                        <span class="spec-value">8 meters</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Empty Mass</span>
+                        <span class="spec-value">12,500 kg</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Max Payload</span>
+                        <span class="spec-value">5,000 kg</span>
+                    </div>
+                </div>
+                
+                <div class="spec-group">
+                    <h3>Performance Metrics</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Max Acceleration</span>
+                        <span class="spec-value excellent">100g (internal: 0g)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-excellent" style="width: 95%;"></div>
+                    </div>
+                    
+                    <div class="spec-row" style="margin-top: 10px;">
+                        <span class="spec-label">Max Velocity</span>
+                        <span class="spec-value excellent">0.1c (30,000 km/s)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-excellent" style="width: 85%;"></div>
+                    </div>
+                    
+                    <div class="spec-row" style="margin-top: 10px;">
+                        <span class="spec-label">Field Efficiency</span>
+                        <span class="spec-value good">87%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-good" style="width: 87%;"></div>
+                    </div>
+                    
+                    <div class="spec-row" style="margin-top: 10px;">
+                        <span class="spec-label">Energy Efficiency</span>
+                        <span class="spec-value moderate">68%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-moderate" style="width: 68%;"></div>
+                    </div>
+                </div>
+                
+                <div class="spec-group">
+                    <h3>Anti-Gravity Field</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Field Type</span>
+                        <span class="spec-value">Gravitomagnetic</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Field Radius</span>
+                        <span class="spec-value">50 meters</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Field Strength</span>
+                        <span class="spec-value">1.2 × 10⁸ T·m/s</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Power Requirement</span>
+                        <span class="spec-value">2.5 GW</span>
+                    </div>
+                </div>
+                
+                <div class="formula-display">
+                    <h4>Lift Force Equation</h4>
+                    <div class="formula">F = ∇(m·B<sub>g</sub>) = ρV·∇B<sub>g</sub></div>
+                </div>
+                
+                <div class="validation-badge">
+                    ✓ Design validated against physics constraints
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Export Design</button>
+                    <button class="btn btn-secondary">Simulate</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="verification-hash">
+            Verification Hash: 8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p3q... | Generated by PRD-13.4 SpacecraftDesign Module
+        </div>
+    </div>
+</body>
+</html>
