@@ -174,11 +174,12 @@ export class PaperIntegration {
       // Try to generate a paper
       const paper = this.generator.generatePaper({
         lawName: 'Test Law',
-        originalFormula: 'F = ma',
-        reframedFormula: 'I(F) = log(P)',
-        strategy: 'information',
-        derivationSteps: ['Step 1', 'Step 2'],
-        consistencyScore: 0.9
+        reframingStrategy: 'information',
+        includeDerivations: true,
+        includeExperiments: false,
+        includeApplications: true,
+        targetJournal: 'Physical Review Letters',
+        depth: 'detailed'
       });
       return paper != null && paper.id !== undefined;
     } catch {
@@ -202,15 +203,13 @@ export class PaperIntegration {
   } {
     // Generate paper
     const paper = this.generator.generatePaper({
-      ...config,
-      derivationSteps: [
-        `Start with original law: ${config.originalFormula}`,
-        `Apply ${config.strategy} reframing strategy`,
-        `Derive reframed form: ${config.reframedFormula}`,
-        'Verify mathematical consistency',
-        'Validate physical predictions'
-      ],
-      consistencyScore: 0.85
+      lawName: config.lawName,
+      reframingStrategy: config.strategy,
+      includeDerivations: true,
+      includeExperiments: true,
+      includeApplications: true,
+      targetJournal: 'Physical Review Letters',
+      depth: 'comprehensive'
     });
 
     // Generate figures

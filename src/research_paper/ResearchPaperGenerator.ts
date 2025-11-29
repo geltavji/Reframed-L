@@ -27,7 +27,7 @@ export interface ResearchPaper {
   abstract: string;
   keywords: string[];
   sections: Section[];
-  figures: Figure[];
+  figures: PaperFigure[];
   tables: Table[];
   equations: Equation[];
   references: Reference[];
@@ -59,7 +59,7 @@ export interface Subsection {
   content: string;
 }
 
-export interface Figure {
+export interface PaperFigure {
   id: string;
   caption: string;
   description: string;
@@ -471,7 +471,7 @@ laws and developing practical applications in quantum computing and
 gravitational engineering.`;
   }
 
-  private generateFigures(config: PaperConfig): Figure[] {
+  private generateFigures(config: PaperConfig): PaperFigure[] {
     return [
       {
         id: 'fig-1',
@@ -636,7 +636,7 @@ gravitational engineering.`;
   private generateMetadata(
     config: PaperConfig,
     sections: Section[],
-    figures: Figure[],
+    figures: PaperFigure[],
     tables: Table[],
     equations: Equation[],
     references: Reference[]

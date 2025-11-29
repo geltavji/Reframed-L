@@ -69,10 +69,10 @@ export interface WalkthroughStep {
   visualFocus: string;
   duration: number;
   interactive: boolean;
-  quiz?: QuizQuestion;
+  quiz?: AnimationQuizQuestion;
 }
 
-export interface QuizQuestion {
+export interface AnimationQuizQuestion {
   question: string;
   options: string[];
   correctIndex: number;
