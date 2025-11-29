@@ -287,7 +287,7 @@ export class ReframedLawsAPI {
     return this.createResponse(summaries);
   }
 
-  getLaw(id: string): APIResponse<ReframedLaw> {
+  getLaw(id: string): APIResponse<ReframedLaw | undefined> {
     const law = this.laws.get(id);
     if (!law) {
       return this.createResponse(undefined, `Law not found: ${id}`);
@@ -295,7 +295,7 @@ export class ReframedLawsAPI {
     return this.createResponse(law);
   }
 
-  validate(lawId: string, strategy: string, strict: boolean = false): APIResponse<ValidationResult> {
+  validate(lawId: string, strategy: string, strict: boolean = false): APIResponse<ValidationResult | undefined> {
     const law = this.laws.get(lawId);
     if (!law) {
       return this.createResponse(undefined, `Law not found: ${lawId}`);
@@ -324,7 +324,7 @@ export class ReframedLawsAPI {
     });
   }
 
-  simulate(config: SimulationConfig): APIResponse<SimulationResult> {
+  simulate(config: SimulationConfig): APIResponse<SimulationResult | undefined> {
     const mechanisms: Record<string, () => SimulationResult> = {
       'casimir': () => ({
         mechanism: 'casimir',
@@ -375,7 +375,7 @@ export class ReframedLawsAPI {
     return this.createResponse(simulator());
   }
 
-  export(config: ExportConfig): APIResponse<ExportResult> {
+  export(config: ExportConfig): APIResponse<ExportResult | undefined> {
     const lawsToExport = config.laws 
       ? config.laws.map(id => this.laws.get(id)).filter(Boolean) as ReframedLaw[]
       : Array.from(this.laws.values());
