@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reframed Laws Overview - Reframed Laws Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+    .dashboard-header {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    .dashboard-header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    .dashboard-header p { opacity: 0.9; }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    .widget {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    .widget-header {
+      background: #2563eb;
+      color: white;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+    }
+    .widget-content {
+      padding: 1.5rem;
+    }
+    .formula-display {
+      font-family: 'Latin Modern Math', serif;
+      font-size: 1.25rem;
+      text-align: center;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: #7c3aed20;
+      color: #7c3aed;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <header class="dashboard-header">
+    <h1>Reframed Laws Overview</h1>
+    <p>Main dashboard showing all reframed physics laws</p>
+  </header>
+  <main class="dashboard-grid">
+    
+        <div class="widget">
+          <div class="widget-header">Newton's Second Law</div>
+          <div class="widget-content">
+            <div class="formula-display">
+              <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">Original</div>
+              F = ma
+            </div>
+            <div class="formula-display" style="background: #faf5ff;">
+              <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">Reframed</div>
+              I(F = ma) = -log₂(P(F))
+            </div>
+            <span class="tag">information</span>
+          </div>
+        </div>
+      
+        <div class="widget">
+          <div class="widget-header">Mass-Energy Equivalence</div>
+          <div class="widget-content">
+            <div class="formula-display">
+              <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">Original</div>
+              E = mc²
+            </div>
+            <div class="formula-display" style="background: #faf5ff;">
+              <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">Reframed</div>
+              I(E = mc²) = -log₂(P(E))
+            </div>
+            <span class="tag">information</span>
+          </div>
+        </div>
+      
+        <div class="widget">
+          <div class="widget-header">Schrödinger Equation</div>
+          <div class="widget-content">
+            <div class="formula-display">
+              <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">Original</div>
+              iℏ∂ψ/∂t = Ĥψ
+            </div>
+            <div class="formula-display" style="background: #faf5ff;">
+              <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">Reframed</div>
+              COMPUTE(iℏ∂ψ/∂t = Ĥψ) : O(f(n)) → result
+            </div>
+            <span class="tag">computational</span>
+          </div>
+        </div>
+      
+  </main>
+</body>
+</html>

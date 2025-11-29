@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reframed Laws - Real-time Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; min-height: 100vh; }
+        
+        .header { background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); padding: 20px 40px; }
+        .header h1 { font-size: 2rem; margin-bottom: 5px; }
+        .header p { opacity: 0.9; }
+        
+        .dashboard { display: grid; grid-template-columns: 1fr 300px; gap: 20px; padding: 20px; max-width: 1600px; margin: 0 auto; }
+        
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+        
+        .card { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; backdrop-filter: blur(10px); }
+        .card h3 { color: #667eea; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .stat-card { background: rgba(102, 126, 234, 0.2); border-radius: 10px; padding: 20px; text-align: center; }
+        .stat-value { font-size: 2.5rem; font-weight: bold; color: #667eea; }
+        .stat-label { font-size: 0.9rem; opacity: 0.8; margin-top: 5px; }
+        .stat-change { font-size: 0.8rem; margin-top: 5px; }
+        .stat-change.positive { color: #4ade80; }
+        .stat-change.negative { color: #f87171; }
+        
+        /* Activity Chart */
+        .chart-container { height: 200px; display: flex; align-items: flex-end; gap: 5px; padding: 20px 0; }
+        .chart-bar { flex: 1; background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); border-radius: 4px 4px 0 0; transition: height 0.3s ease; min-height: 10px; }
+        .chart-labels { display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.6; margin-top: 10px; }
+        
+        /* Live Feed */
+        .live-feed { max-height: 400px; overflow-y: auto; }
+        .feed-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 10px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        .feed-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .feed-icon.validation { background: #4ade80; }
+        .feed-icon.simulation { background: #60a5fa; }
+        .feed-icon.export { background: #f472b6; }
+        .feed-icon.error { background: #f87171; }
+        .feed-icon.info { background: #fbbf24; }
+        .feed-content { flex: 1; }
+        .feed-title { font-weight: 600; margin-bottom: 3px; }
+        .feed-details { font-size: 0.85rem; opacity: 0.7; }
+        .feed-time { font-size: 0.75rem; opacity: 0.5; }
+        
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+        
+        /* System Status */
+        .status-list { display: flex; flex-direction: column; gap: 10px; }
+        .status-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; }
+        .status-indicator { width: 10px; height: 10px; border-radius: 50%; }
+        .status-indicator.online { background: #4ade80; box-shadow: 0 0 10px #4ade80; }
+        .status-indicator.offline { background: #f87171; }
+        .status-indicator.warning { background: #fbbf24; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        /* Quick Actions */
+        .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .action-btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .action-btn.primary { background: linear-gradient(90deg, #667eea, #764ba2); color: white; }
+        .action-btn.secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        
+        /* Progress Bars */
+        .progress-item { margin-bottom: 15px; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+        .progress-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+        .progress-fill.validation { background: linear-gradient(90deg, #4ade80, #22c55e); }
+        .progress-fill.simulation { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .progress-fill.export { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .actions-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔴 Real-time Dashboard</h1>
+        <p>Live monitoring of Reframed Laws Framework operations</p>
+    </div>
+    
+    <div class="dashboard">
+        <div class="main-content">
+            <!-- Stats Overview -->
+            <div class="card">
+                <h3>📊 Live Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="validations">247</div>
+                        <div class="stat-label">Validations Today</div>
+                        <div class="stat-change positive">↑ 12% from yesterday</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="simulations">89</div>
+                        <div class="stat-label">Simulations Run</div>
+                        <div class="stat-change positive">↑ 8% from yesterday</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="papers">34</div>
+                        <div class="stat-label">Papers Generated</div>
+                        <div class="stat-change positive">↑ 23% from yesterday</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="users">156</div>
+                        <div class="stat-label">Active Users</div>
+                        <div class="stat-change negative">↓ 3% from yesterday</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activity Chart -->
+            <div class="card">
+                <h3>📈 Activity (Last 24 Hours)</h3>
+                <div class="chart-container" id="activityChart"></div>
+                <div class="chart-labels">
+                    <span>00:00</span>
+                    <span>06:00</span>
+                    <span>12:00</span>
+                    <span>18:00</span>
+                    <span>Now</span>
+                </div>
+            </div>
+            
+            <!-- Live Feed -->
+            <div class="card">
+                <h3>🔔 Live Event Feed</h3>
+                <div class="live-feed" id="liveFeed">
+                    <!-- Events will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <!-- System Status -->
+            <div class="card">
+                <h3>🖥️ System Status</h3>
+                <div class="status-list">
+                    <div class="status-item">
+                        <span>API Server</span>
+                        <div class="status-indicator online"></div>
+                    </div>
+                    <div class="status-item">
+                        <span>Validation Engine</span>
+                        <div class="status-indicator online"></div>
+                    </div>
+                    <div class="status-item">
+                        <span>Simulation Core</span>
+                        <div class="status-indicator warning"></div>
+                    </div>
+                    <div class="status-item">
+                        <span>Paper Generator</span>
+                        <div class="status-indicator online"></div>
+                    </div>
+                    <div class="status-item">
+                        <span>Export Service</span>
+                        <div class="status-indicator online"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Current Operations -->
+            <div class="card">
+                <h3>⚙️ Current Operations</h3>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Einstein Field Validation</span>
+                        <span id="validationProgress">78%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill validation" style="width: 78%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Casimir Simulation</span>
+                        <span id="simulationProgress">45%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill simulation" style="width: 45%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>LaTeX Export</span>
+                        <span id="exportProgress">92%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill export" style="width: 92%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <h3>⚡ Quick Actions</h3>
+                <div class="actions-grid">
+                    <button class="action-btn primary" onclick="runValidation()">Validate</button>
+                    <button class="action-btn primary" onclick="runSimulation()">Simulate</button>
+                    <button class="action-btn secondary" onclick="generatePaper()">Generate Paper</button>
+                    <button class="action-btn secondary" onclick="exportAll()">Export All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize activity chart
+        function initChart() {
+            const container = document.getElementById('activityChart');
+            for (let i = 0; i < 24; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = `${Math.random() * 80 + 20}%`;
+                container.appendChild(bar);
+            }
+        }
+        
+        // Event types
+        const eventTypes = [
+            { type: 'validation', icon: '✓', title: 'Validation Complete', details: 'Newton\'s Second Law - Information reframing validated successfully (Score: 92%)' },
+            { type: 'simulation', icon: '⚛', title: 'Simulation Started', details: 'Alcubierre warp drive simulation initiated with 10,000 iterations' },
+            { type: 'export', icon: '📄', title: 'Export Complete', details: 'LaTeX export of Einstein Field Equations completed (2.3 MB)' },
+            { type: 'validation', icon: '✓', title: 'Validation Progress', details: 'Schrödinger Equation - Computational reframing at 67%' },
+            { type: 'simulation', icon: '⚛', title: 'Simulation Complete', details: 'Casimir effect simulation finished - Force: 1.3×10⁻⁹ N' },
+            { type: 'info', icon: 'ℹ', title: 'System Update', details: 'New extended law added: Hawking Radiation equation' },
+            { type: 'validation', icon: '✓', title: 'Batch Validation', details: '12 laws validated in parallel - Average score: 88%' },
+            { type: 'export', icon: '📄', title: 'Paper Generated', details: 'Research paper on Quantum Gravity Reframings exported to PDF' }
+        ];
+        
+        // Add event to feed
+        function addEvent(event) {
+            const feed = document.getElementById('liveFeed');
+            const item = document.createElement('div');
+            item.className = 'feed-item';
+            item.innerHTML = `
+                <div class="feed-icon ${event.type}">${event.icon}</div>
+                <div class="feed-content">
+                    <div class="feed-title">${event.title}</div>
+                    <div class="feed-details">${event.details}</div>
+                    <div class="feed-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+            feed.insertBefore(item, feed.firstChild);
+            
+            // Keep only last 10 events
+            while (feed.children.length > 10) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+        
+        // Simulate real-time updates
+        function simulateUpdates() {
+            // Add random event
+            const event = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+            addEvent(event);
+            
+            // Update stats randomly
+            const stats = ['validations', 'simulations', 'papers', 'users'];
+            const stat = stats[Math.floor(Math.random() * stats.length)];
+            const el = document.getElementById(stat);
+            el.textContent = parseInt(el.textContent) + Math.floor(Math.random() * 3);
+            
+            // Update progress bars
+            updateProgress('validationProgress', 78, 100);
+            updateProgress('simulationProgress', 45, 100);
+            updateProgress('exportProgress', 92, 100);
+        }
+        
+        function updateProgress(id, current, max) {
+            const newVal = Math.min(max, current + Math.floor(Math.random() * 10));
+            document.getElementById(id).textContent = newVal + '%';
+            document.querySelector(`#${id}`).parentElement.nextElementSibling.querySelector('.progress-fill').style.width = newVal + '%';
+        }
+        
+        // Quick actions
+        function runValidation() {
+            addEvent({ type: 'validation', icon: '✓', title: 'Validation Initiated', details: 'Starting validation of all 60 reframed laws...' });
+        }
+        
+        function runSimulation() {
+            addEvent({ type: 'simulation', icon: '⚛', title: 'Simulation Queued', details: 'Anti-gravity mechanism simulation added to queue' });
+        }
+        
+        function generatePaper() {
+            addEvent({ type: 'export', icon: '📄', title: 'Paper Generation Started', details: 'Generating comprehensive research paper on Unified Laws...' });
+        }
+        
+        function exportAll() {
+            addEvent({ type: 'export', icon: '📄', title: 'Bulk Export Started', details: 'Exporting all 12 laws × 5 strategies to LaTeX format' });
+        }
+        
+        // Initialize
+        initChart();
+        
+        // Add initial events
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => addEvent(eventTypes[i]), i * 100);
+        }
+        
+        // Start real-time simulation
+        setInterval(simulateUpdates, 3000);
+    </script>
+</body>
+</html>

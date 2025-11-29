@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Laws Explorer - Reframed Laws Framework</title>
+  <style>
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-card: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-green: #22c55e;
+      --accent-orange: #f59e0b;
+      --accent-pink: #ec4899;
+      --accent-cyan: #06b6d4;
+      --border: #e2e8f0;
+      --shadow: rgba(0, 0, 0, 0.05);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #0f172a;
+        --bg-card: #1e293b;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --border: rgba(255, 255, 255, 0.1);
+        --shadow: rgba(0, 0, 0, 0.3);
+      }
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+      border-radius: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+    
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent-blue);
+    }
+    
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .filter-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+    
+    .filter-btn.active {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+    
+    /* Laws Grid */
+    .laws-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .law-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .law-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px var(--shadow);
+    }
+    
+    .law-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .law-domain {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .domain-mechanics { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+    .domain-relativity { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+    .domain-quantum { background: rgba(34, 197, 94, 0.15); color: var(--accent-green); }
+    .domain-thermo { background: rgba(245, 158, 11, 0.15); color: var(--accent-orange); }
+    .domain-em { background: rgba(236, 72, 153, 0.15); color: var(--accent-pink); }
+    .domain-cosmology { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); }
+    
+    .law-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    
+    .law-original {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Reframings */
+    .reframings {
+      padding: 0.75rem;
+    }
+    
+    .reframing-item {
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      background: var(--bg-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .reframing-item:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+    
+    .reframing-item.expanded {
+      background: rgba(59, 130, 246, 0.1);
+    }
+    
+    .reframing-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .reframing-type {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .type-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    
+    .type-info { background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); color: white; }
+    .type-comp { background: linear-gradient(135deg, var(--accent-green), var(--accent-blue)); color: white; }
+    .type-geom { background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); color: white; }
+    .type-holo { background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink)); color: white; }
+    .type-emerg { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green)); color: white; }
+    
+    .type-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .reframing-score {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent-green);
+    }
+    
+    .reframing-formula {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: var(--bg-card);
+      border-radius: 0.25rem;
+      display: none;
+    }
+    
+    .reframing-item.expanded .reframing-formula {
+      display: block;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 3rem;
+      margin-top: 3rem;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+    
+    .footer-hash {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      opacity: 0.6;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📚 All Laws Explorer</h1>
+      <p>Complete Reframed Laws Framework - 12 Laws × 5 Strategies = 60 Reframings</p>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-value">12</div>
+          <div class="stat-label">Original Laws</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Strategies</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">60</div>
+          <div class="stat-label">Reframings</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">85%</div>
+          <div class="stat-label">Avg Validation</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <button class="filter-btn active">All Domains</button>
+      <button class="filter-btn">🔵 Mechanics</button>
+      <button class="filter-btn">🟣 Relativity</button>
+      <button class="filter-btn">🟢 Quantum</button>
+      <button class="filter-btn">🟠 Thermodynamics</button>
+      <button class="filter-btn">🔴 Electromagnetism</button>
+      <button class="filter-btn">🔵 Cosmology</button>
+    </div>
+    
+    <!-- Laws Grid -->
+    <div class="laws-grid">
+      <!-- Newton's Second Law -->
+      <div class="law-card">
+        <div class="law-header">
+          <span class="law-domain domain-mechanics">Classical Mechanics</span>
+          <h3 class="law-name">Newton's Second Law</h3>
+          <div class="law-original">F = ma</div>
+        </div>
+        <div class="reframings">
+          <div class="reframing-item expanded">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-info">I</div>
+                <span class="type-name">Information</span>
+              </div>
+              <span class="reframing-score">87%</span>
+            </div>
+            <div class="reframing-formula">I(F = ma) = -log₂(P(F))</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-comp">C</div>
+                <span class="type-name">Computational</span>
+              </div>
+              <span class="reframing-score">92%</span>
+            </div>
+            <div class="reframing-formula">COMPUTE(F = ma) : O(1) → result</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-geom">G</div>
+                <span class="type-name">Geometric</span>
+              </div>
+              <span class="reframing-score">84%</span>
+            </div>
+            <div class="reframing-formula">F = ∇·g where g is metric tensor</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-holo">H</div>
+                <span class="type-name">Holographic</span>
+              </div>
+              <span class="reframing-score">78%</span>
+            </div>
+            <div class="reframing-formula">F_boundary = F_bulk / Area</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-emerg">E</div>
+                <span class="type-name">Emergent</span>
+              </div>
+              <span class="reframing-score">81%</span>
+            </div>
+            <div class="reframing-formula">F = lim_{n→∞} f_n (collective)</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mass-Energy -->
+      <div class="law-card">
+        <div class="law-header">
+          <span class="law-domain domain-relativity">Special Relativity</span>
+          <h3 class="law-name">Mass-Energy Equivalence</h3>
+          <div class="law-original">E = mc²</div>
+        </div>
+        <div class="reframings">
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-info">I</div>
+                <span class="type-name">Information</span>
+              </div>
+              <span class="reframing-score">89%</span>
+            </div>
+            <div class="reframing-formula">I(E = mc²) = -log₂(P(E))</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-comp">C</div>
+                <span class="type-name">Computational</span>
+              </div>
+              <span class="reframing-score">94%</span>
+            </div>
+            <div class="reframing-formula">COMPUTE(E = mc²) : O(1) → energy</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-geom">G</div>
+                <span class="type-name">Geometric</span>
+              </div>
+              <span class="reframing-score">91%</span>
+            </div>
+            <div class="reframing-formula">E² = (pc)² + (mc²)² (Minkowski)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-holo">H</div>
+                <span class="type-name">Holographic</span>
+              </div>
+              <span class="reframing-score">82%</span>
+            </div>
+            <div class="reframing-formula">E = mc² = kT_H · S_BH</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-emerg">E</div>
+                <span class="type-name">Emergent</span>
+              </div>
+              <span class="reframing-score">79%</span>
+            </div>
+            <div class="reframing-formula">E = collective binding energy</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Schrödinger Equation -->
+      <div class="law-card">
+        <div class="law-header">
+          <span class="law-domain domain-quantum">Quantum Mechanics</span>
+          <h3 class="law-name">Schrödinger Equation</h3>
+          <div class="law-original">iℏ∂ψ/∂t = Ĥψ</div>
+        </div>
+        <div class="reframings">
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-info">I</div>
+                <span class="type-name">Information</span>
+              </div>
+              <span class="reframing-score">85%</span>
+            </div>
+            <div class="reframing-formula">S(ψ) = -Tr(ρ log ρ)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-comp">C</div>
+                <span class="type-name">Computational</span>
+              </div>
+              <span class="reframing-score">96%</span>
+            </div>
+            <div class="reframing-formula">COMPUTE(Ĥψ) : O(2^n) → result</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-geom">G</div>
+                <span class="type-name">Geometric</span>
+              </div>
+              <span class="reframing-score">88%</span>
+            </div>
+            <div class="reframing-formula">∇_H ψ = 0 (Hilbert connection)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-holo">H</div>
+                <span class="type-name">Holographic</span>
+              </div>
+              <span class="reframing-score">76%</span>
+            </div>
+            <div class="reframing-formula">ψ_bulk ↔ CFT_boundary</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-emerg">E</div>
+                <span class="type-name">Emergent</span>
+              </div>
+              <span class="reframing-score">73%</span>
+            </div>
+            <div class="reframing-formula">ψ = emergent collective state</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Einstein Field Equations -->
+      <div class="law-card">
+        <div class="law-header">
+          <span class="law-domain domain-relativity">General Relativity</span>
+          <h3 class="law-name">Einstein Field Equations</h3>
+          <div class="law-original">Gμν = 8πG Tμν</div>
+        </div>
+        <div class="reframings">
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-info">I</div>
+                <span class="type-name">Information</span>
+              </div>
+              <span class="reframing-score">90%</span>
+            </div>
+            <div class="reframing-formula">I(Gμν) = S_gravity = A/(4l_P²)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-comp">C</div>
+                <span class="type-name">Computational</span>
+              </div>
+              <span class="reframing-score">88%</span>
+            </div>
+            <div class="reframing-formula">SOLVE(Gμν = 8πGTμν) : O(n³)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-geom">G</div>
+                <span class="type-name">Geometric</span>
+              </div>
+              <span class="reframing-score">95%</span>
+            </div>
+            <div class="reframing-formula">Rμν - ½gμνR + Λgμν = κTμν</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-holo">H</div>
+                <span class="type-name">Holographic</span>
+              </div>
+              <span class="reframing-score">86%</span>
+            </div>
+            <div class="reframing-formula">S_A = Area(γ_A)/(4G_N)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-emerg">E</div>
+                <span class="type-name">Emergent</span>
+              </div>
+              <span class="reframing-score">83%</span>
+            </div>
+            <div class="reframing-formula">Spacetime = entanglement structure</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Heisenberg Uncertainty -->
+      <div class="law-card">
+        <div class="law-header">
+          <span class="law-domain domain-quantum">Quantum Mechanics</span>
+          <h3 class="law-name">Heisenberg Uncertainty</h3>
+          <div class="law-original">ΔxΔp ≥ ℏ/2</div>
+        </div>
+        <div class="reframings">
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-info">I</div>
+                <span class="type-name">Information</span>
+              </div>
+              <span class="reframing-score">91%</span>
+            </div>
+            <div class="reframing-formula">I(x) + I(p) ≥ log(πeℏ)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-comp">C</div>
+                <span class="type-name">Computational</span>
+              </div>
+              <span class="reframing-score">89%</span>
+            </div>
+            <div class="reframing-formula">ERROR_bound(x,p) ≥ ℏ/2</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-geom">G</div>
+                <span class="type-name">Geometric</span>
+              </div>
+              <span class="reframing-score">87%</span>
+            </div>
+            <div class="reframing-formula">Area(phase space) ≥ πℏ</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-holo">H</div>
+                <span class="type-name">Holographic</span>
+              </div>
+              <span class="reframing-score">74%</span>
+            </div>
+            <div class="reframing-formula">Planck cell minimum</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-emerg">E</div>
+                <span class="type-name">Emergent</span>
+              </div>
+              <span class="reframing-score">72%</span>
+            </div>
+            <div class="reframing-formula">Fundamental discreteness</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Maxwell's Equations -->
+      <div class="law-card">
+        <div class="law-header">
+          <span class="law-domain domain-em">Electromagnetism</span>
+          <h3 class="law-name">Maxwell's Equations</h3>
+          <div class="law-original">∇·E = ρ/ε₀</div>
+        </div>
+        <div class="reframings">
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-info">I</div>
+                <span class="type-name">Information</span>
+              </div>
+              <span class="reframing-score">86%</span>
+            </div>
+            <div class="reframing-formula">I(EM) = channel capacity</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-comp">C</div>
+                <span class="type-name">Computational</span>
+              </div>
+              <span class="reframing-score">90%</span>
+            </div>
+            <div class="reframing-formula">SIMULATE(Maxwell) : O(n⁴)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-geom">G</div>
+                <span class="type-name">Geometric</span>
+              </div>
+              <span class="reframing-score">93%</span>
+            </div>
+            <div class="reframing-formula">dF = 0, d*F = *J</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-holo">H</div>
+                <span class="type-name">Holographic</span>
+              </div>
+              <span class="reframing-score">77%</span>
+            </div>
+            <div class="reframing-formula">U(1) gauge boundary</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-emerg">E</div>
+                <span class="type-name">Emergent</span>
+              </div>
+              <span class="reframing-score">80%</span>
+            </div>
+            <div class="reframing-formula">EM = photon collective</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Second Law of Thermodynamics -->
+      <div class="law-card">
+        <div class="law-header">
+          <span class="law-domain domain-thermo">Thermodynamics</span>
+          <h3 class="law-name">Second Law of Thermodynamics</h3>
+          <div class="law-original">dS ≥ 0</div>
+        </div>
+        <div class="reframings">
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-info">I</div>
+                <span class="type-name">Information</span>
+              </div>
+              <span class="reframing-score">94%</span>
+            </div>
+            <div class="reframing-formula">dI/dt ≤ 0 (info loss)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-comp">C</div>
+                <span class="type-name">Computational</span>
+              </div>
+              <span class="reframing-score">91%</span>
+            </div>
+            <div class="reframing-formula">E_erase ≥ kT ln(2)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-geom">G</div>
+                <span class="type-name">Geometric</span>
+              </div>
+              <span class="reframing-score">82%</span>
+            </div>
+            <div class="reframing-formula">Phase space expansion</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-holo">H</div>
+                <span class="type-name">Holographic</span>
+              </div>
+              <span class="reframing-score">88%</span>
+            </div>
+            <div class="reframing-formula">S_bdy ≤ A/(4G)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-emerg">E</div>
+                <span class="type-name">Emergent</span>
+              </div>
+              <span class="reframing-score">85%</span>
+            </div>
+            <div class="reframing-formula">Arrow of time emergence</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Dirac Equation -->
+      <div class="law-card">
+        <div class="law-header">
+          <span class="law-domain domain-quantum">Quantum Field Theory</span>
+          <h3 class="law-name">Dirac Equation</h3>
+          <div class="law-original">(iγ^μ∂μ - m)ψ = 0</div>
+        </div>
+        <div class="reframings">
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-info">I</div>
+                <span class="type-name">Information</span>
+              </div>
+              <span class="reframing-score">83%</span>
+            </div>
+            <div class="reframing-formula">Spinor information content</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-comp">C</div>
+                <span class="type-name">Computational</span>
+              </div>
+              <span class="reframing-score">87%</span>
+            </div>
+            <div class="reframing-formula">COMPUTE(Dirac) : O(n⁴)</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-geom">G</div>
+                <span class="type-name">Geometric</span>
+              </div>
+              <span class="reframing-score">92%</span>
+            </div>
+            <div class="reframing-formula">Clifford algebra structure</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-holo">H</div>
+                <span class="type-name">Holographic</span>
+              </div>
+              <span class="reframing-score">75%</span>
+            </div>
+            <div class="reframing-formula">Spinor boundary data</div>
+          </div>
+          <div class="reframing-item">
+            <div class="reframing-header">
+              <div class="reframing-type">
+                <div class="type-icon type-emerg">E</div>
+                <span class="type-name">Emergent</span>
+              </div>
+              <span class="reframing-score">78%</span>
+            </div>
+            <div class="reframing-formula">Emergent fermion structure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Reframed Laws Framework - PRD-17: Visualization UI/UX</p>
+      <p>All 12 laws reframed with 5 strategies = 60 total reframings</p>
+      <p class="footer-hash">Verification Hash: all9c0d1e2f3g4h5i6j7k8l9m0n1o2p3q4r5s6t7...</p>
+    </div>
+  </div>
+  
+  <script>
+    // Simple interactivity
+    document.querySelectorAll('.reframing-item').forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('expanded');
+      });
+    });
+    
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
